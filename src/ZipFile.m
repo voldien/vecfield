@@ -59,9 +59,9 @@
     
     /*	Allocate size for file.	*/
     *pbuf = malloc(stat.size);
-    *	assert(*pbuf);
-    * 
-    *	/*	Read whole file.    */
+    assert(*pbuf);
+    
+    /*	Read whole file.    */
     nbytes = zip_fread(zfile, *pbuf, stat.size);
     
     /*	*/
@@ -112,7 +112,7 @@
             @throw [NSException
             exceptionWithName:@"NSErrorExecption"
             reason:[NSString stringWithUTF8String:buf]
-            userInfo:nil];
+            userInfo:nil];  
         }
     }
     
