@@ -31,7 +31,7 @@
     char buf[1024];
     
     /*	Check if path argument is valid.	*/
-    if(!cpath || !pbuf || !*pbuf){
+    if(!cpath || !pbuf){
         @throw [NSException
         exceptionWithName:@"NSNullReferenceException"
         reason:@"path or the pbuf argument must not be a null argument"
