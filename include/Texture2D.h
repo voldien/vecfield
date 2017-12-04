@@ -33,7 +33,7 @@
  * Constructor of the object.
  * @return object id.
  */
--(id) initWithTexture: (int) texture: (int) width: (int) height;
+-(id) initWithTexture: (int) ptexture: (int) width: (int) height;
 
 /**
  * Release all resources assoicated

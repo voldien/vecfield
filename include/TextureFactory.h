@@ -18,7 +18,7 @@
 */
 #ifndef _VF_TEXTURE_FACTORY_H_
 #define _VF_TEXTURE_FACTORY_H_ 1
-#include"Texture2D.h"
+#import"Texture2D.h"
 
 /**
  * Responsible for creating
@@ -37,6 +37,7 @@
  * Create OpenGL Texture.
  * @return non-null texture object.
  * @throw NSInvalidArgumentException if with or height is less than 1.
+ * @throw NSNullReferenceException if pixels is a null argument.
  */
 +(Texture2D*) createTexture: (int) width: (int) height: (const void*) pixels;
 
