@@ -18,11 +18,12 @@
 */
 #ifndef _VF_ZIP_H_
 #define _VF_ZIP_H_ 1
-#include"Resource.h"
+#import"Resource.h"
 #include<zip.h>
 
 /**
- * 
+ * Class for open and read files
+ * from a zip file.
  */
 @interface ZipFile : Resource{
     void* pfile;
