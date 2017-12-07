@@ -119,7 +119,6 @@
     /* Create zipfile object. */
     zipfile = [[[ZipFile alloc] init] autorelease];
     zipfile->pfile = zip;
-
     return zipfile;
 }
 
