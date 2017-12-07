@@ -9,6 +9,8 @@ int main(int argc, const char** argv){
         NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
         VecField* field = [VecField createVecField: argc: argv];
         [field startSimulation];
+
+        /*  Release all resources.  */
         [pool drain];
 
     }@catch(NSException* ex){
