@@ -26,7 +26,7 @@
  * from a zip file.
  */
 @interface ZipFile : Resource{
-    void* pfile;
+	void* pfile;
 }
 
 /**
