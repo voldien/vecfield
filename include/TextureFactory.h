@@ -27,13 +27,6 @@
 @interface TextureFactory : NSObject 
 
 /**
- * Load and create file from file.
- * @return non-null texture object.
- * @throw NSInvalidArgumentException if file does not exist.
- */
-+(Texture2D*) loadTexture: (const char*) cpath;
-
-/**
  * Create OpenGL Texture.
  * @return non-null texture object.
  * @throw NSInvalidArgumentException if with or height is less than 1.
