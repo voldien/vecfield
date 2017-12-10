@@ -35,8 +35,8 @@
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP);
 
 	/*  Bilinear interploation on the pixel colors. */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	/*  Assign texture data.    */
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
@@ -74,7 +74,7 @@
 	/*  Iterate through each pixel. */
 	for(y = 0; y < height; y++){
 		for(x = 0; x < width; x++){
-			float distance = sqrtf(powf((x - cx), 2.0f) * powf((y - cy), 2.0f));
+			float distance = sqrtf(powf((x - cx), 2.0f) + powf((y - cy), 2.0f));
 			if(distance <= (float)cx){
 				pixels[y * height + x] = UINT_MAX;
 			}else{
