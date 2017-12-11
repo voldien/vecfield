@@ -65,7 +65,7 @@
 	}
 	else{
 		[self bind];
-		glUniform2fv(location, 1, pvalue);
+		glUniform2fvARB(location, 1, pvalue);
 	}
 }
 
