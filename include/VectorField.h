@@ -28,8 +28,8 @@
 @interface VectorField
 
 /**
- * Create vector field.
- * @return non null vector field.
+ * Create vector field in R^2.
+ * @return non null vector field in R^2.
  * @throws NSInvalidArgumentException if width or height is less than 1.
  */
 +(float*) createVectorField: (int) width: (int) height;
