@@ -29,14 +29,10 @@
 	glBindTexture(GL_TEXTURE_2D, text);
 	glPixelStorei(GL_PACK_ALIGNMENT, 4);
 
-	/*	Repeat UV corrdinates.	*/
+	/*	Clamp UV corrdinates.	*/
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_CLAMP);
-
-	/*  Bilinear interploation on the pixel colors. */
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 
 	/*  Assign texture data.    */
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
@@ -44,10 +40,13 @@
 	/*  Create mipmap.  */
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAX_LEVEL, numlevel);
 	glGenerateMipmap(GL_TEXTURE_2D);
+	
+	/*  Bilinear interploation on the pixel colors. */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-	/*  */
-	glBindTexture(GL_TEXTURE_2D, 0);
 	/*  Create texture. */
+	glBindTexture(GL_TEXTURE_2D, 0);
 	return [[[Texture2D alloc] initWithTexture: text: width: height] autorelease];
 }
 
@@ -83,7 +82,7 @@
 		}
 	}
 
-	/*  */
+	/*  Create texture.	*/
 	texture = [TextureFactory createTexture: width: height: pixels];
 	free(pixels);
 	return texture;
