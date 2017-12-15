@@ -10,6 +10,7 @@
 	GLuint text;
 	const int numlevel = 5;
 
+	/*	Check texture size.	*/
 	if(width < 1 || height < 1){
 		@throw [NSException
 				exceptionWithName:@"NSInvalidArgumentException"
@@ -17,6 +18,7 @@
 				userInfo:nil];
 	}
 
+	/*	Check if pixel buffer has been provided.	*/
 	if(pixels == NULL){
 		@throw [NSException
 				exceptionWithName:@"NSNullReferenceException"
