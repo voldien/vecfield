@@ -1,6 +1,7 @@
 #import"GeometryFactory.h"
 #import"Geometry.h"
 #import"Particle.h"
+#include<hpm/hpm.h>
 #include<assert.h>
 #include<GL/glew.h>
 
@@ -24,10 +25,11 @@
 	desc.buffer = (const void*)vertices;
 	desc.indices = (const void*)indices;
 	desc.primitive = GL_TRIANGLES;
-	desc.vertexStride = sizeof(vertices[0]);
 	desc.indicesStride = 4;
 	desc.numIndices = sizeof(indices) / sizeof(indices[0]);
 	desc.numVerticecs = sizeof(vertices) / sizeof(vertices[0]);
+	desc.vertexStride = sizeof(vertices[0]);
+	desc.nElements = 3;
 
 	return [GeometryFactory createGeometry: &desc];
 }
@@ -39,7 +41,7 @@
 	VFParticle* particles;
 	VFGeometryDesc desc = {0};
 
-	/*  */
+	/*	Check argument is valid.	*/
 	if(density <= 0 || width <= 0 || height <= 0){
 		@throw[NSException
 			exceptionWithName:@"NSInvalidArgumentException"
@@ -52,10 +54,10 @@
 	particles = (VFParticle*)malloc(nParticles * sizeof(VFParticle));
 	assert(particles);
 
-	/*  */
+	/*	*/
 	srand(time(NULL));
 
-	/*  Create particles.   */
+	/*  Create particles.	*/
 	for(i = 0; i < height; i++){
 		for(j = 0; j < width; j++){
 			for(k = 0; k < density; k++){
@@ -75,14 +77,59 @@
 	desc.buffer = (const void*)particles;
 	desc.numVerticecs = nParticles;
 	desc.vertexStride = sizeof(VFParticle);
+	desc.nElements = 4;
 	desc.indices = NULL;
 	desc.numIndices = 0;
 	desc.indicesStride = 0;
 	desc.primitive = GL_POINTS;
 
-	/*  Create geometry.    */
+	/*	Create geometry.	*/
 	geometry = [GeometryFactory createGeometry: &desc];
 	free(particles);
+	return geometry;
+}
+
++(Geometry*) createVectorField: (int) width: (int) height: (const float*) vector{
+	
+	int i,j;
+	Geometry* geometry;
+	hpmvec4f* field;
+	VFGeometryDesc desc = {0};
+	
+	/*	Check argument is valid.	*/
+	if(width <= 0 || height <= 0){
+		@throw[NSException
+			exceptionWithName:@"NSInvalidArgumentException"
+			reason:@"numParticles, width and height must all be greater than 0"
+			userInfo:nil];
+	}
+	
+	const int nVectors = width * height;
+	field = (hpmvec4f*)malloc(nVectors * sizeof(hpmvec4f));
+	assert(field);
+	
+	for(i = 0; i < height; i++){
+		for(j = 0; j < width; j++){
+			hpmvec4f* ve = &field[i * height + j];
+			const float* dir = &vector[i * height * 2 + j * 2];
+			
+			hpm_vec4_setf(ve, (float)i, (float)j, dir[0], dir[1]);
+		}
+	}
+	
+	/*  Assign geometry description.    */
+	desc.buffer = (const void*)field;
+	desc.numVerticecs = nVectors;
+	desc.vertexStride = sizeof(hpmvec4f);
+	desc.nElements = 4;
+	desc.indices = NULL;
+	desc.numIndices = 0;
+	desc.indicesStride = 0;
+	desc.primitive = GL_POINTS;
+	
+	/*	Create geometry.	*/
+	geometry = [GeometryFactory createGeometry: &desc];
+	free(field);
 	return geometry;
 }
 
@@ -105,17 +152,18 @@
 			userInfo:nil];
 	}
 
-	/*  */
+	/*	Create vertex array.	*/
 	glGenVertexArrays(1, &init.vao);
 	glBindVertexArray(init.vao);
 
 	/*  */
 	if(desc->numIndices > 0){
-		/*  */
+		/*  Vertices buffer.	*/
 		glGenBuffersARB(1, &init.vbo);
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, init.vbo);
 		glBufferDataARB(GL_ARRAY_BUFFER_ARB, desc->numVerticecs * desc->vertexStride, desc->buffer, GL_STATIC_READ_ARB);
 
+		/*	Indices buffer.	*/
 		glGenBuffersARB(1, &init.ibo);
 		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, init.ibo);
 		glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, desc->numIndices * desc->indicesStride, desc->indices, GL_STATIC_DRAW_ARB);
@@ -127,11 +175,11 @@
 
 	/*  */
 	glEnableVertexAttribArrayARB(0);
-	glVertexAttribPointerARB(0, 3, GL_FLOAT, GL_FALSE, desc->vertexStride, NULL);
+	glVertexAttribPointerARB(0, desc->nElements, GL_FLOAT, GL_FALSE, desc->vertexStride, NULL);
 
 	glBindVertexArray(0);
 
-	/*  */
+	/*  Create geometry.	*/
 	init.target = desc->primitive;
 	init.numVertices = desc->numVerticecs;
 	init.numIndices = desc->numIndices;
