@@ -10,6 +10,7 @@
 	int x, y;
 	const int blocksize = width * height * 2 * sizeof(float);
 
+	/*	Check arguments.	*/
 	if(width < 1 || height < 1){
 		@throw [NSException
 				exceptionWithName:@"NSInvalidArgumentException"
