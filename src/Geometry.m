@@ -55,10 +55,10 @@
 -(void) draw{
 	switch([self getNumIndices]){
 		case 0:
-			glDrawArrays(self->target, 0, self->numVertices);
+			glDrawArrays(self->target, 0, [self getNumVertices]);
 			break;
 		default:
-			glDrawElements(self->target, self->numIndices, GL_UNSIGNED_INT, NULL);
+			glDrawElements(self->target, [self getNumIndices], GL_UNSIGNED_INT, NULL);
 			break;
 	}
 }
