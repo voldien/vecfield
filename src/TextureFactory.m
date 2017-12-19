@@ -8,22 +8,22 @@
 
 	Texture2D* texture;
 	GLuint text;
-	const int numlevel = 5;
+	const int numlevel = 8;
 
 	/*	Check texture size.	*/
 	if(width < 1 || height < 1){
 		@throw [NSException
-				exceptionWithName:@"NSInvalidArgumentException"
-				reason:@"width and height must be greater than 0"
-				userInfo:nil];
+			exceptionWithName:@"NSInvalidArgumentException"
+			reason:@"width and height must be greater than 0"
+			userInfo:nil];
 	}
 
 	/*	Check if pixel buffer has been provided.	*/
 	if(pixels == NULL){
 		@throw [NSException
-				exceptionWithName:@"NSNullReferenceException"
-				reason:@"pixels argument must not be a null argument"
-				userInfo:nil];
+			exceptionWithName:@"NSNullReferenceException"
+			reason:@"pixels argument must not be a null argument"
+			userInfo:nil];
 	}
 
 	/*  Create texture. */
@@ -63,9 +63,9 @@
 	/*  Check if argument is valid. */
 	if(width < 1 || height < 1){
 		@throw [NSException
-				exceptionWithName:@"NSInvalidArgumentException"
-				reason:@"width and height must be greater than 0"
-				userInfo:nil];
+			exceptionWithName:@"NSInvalidArgumentException"
+			reason:@"width and height must be greater than 0"
+			userInfo:nil];
 	}
 
 	/*  Allocate pixel block.   */
@@ -89,6 +89,5 @@
 	free(pixels);
 	return texture;
 }
-
 
 @end
