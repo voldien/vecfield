@@ -9,7 +9,7 @@
 /*  */
 static const char* clfile = "share/particle.cl";
 #ifdef VF_LINUX
-const char* sharedir = "/usr/share/";
+const char* sharedir = "/usr/share/vecfield";
 #else
 const char* sharedir = "";
 #endif
