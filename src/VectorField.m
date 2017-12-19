@@ -13,9 +13,9 @@
 	/*	Check arguments.	*/
 	if(width < 1 || height < 1){
 		@throw [NSException
-				exceptionWithName:@"NSInvalidArgumentException"
-				reason:@"width and height must be greater than 0"
-				userInfo:nil];
+			exceptionWithName:@"NSInvalidArgumentException"
+			reason:@"width and height must be greater than 0"
+			userInfo:nil];
 	}
 
 	/*  Allocate vector field.  */

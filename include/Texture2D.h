@@ -21,7 +21,7 @@
 #import"Resource.h"
 
 /**
- * 
+ * Texture2D container class.
  */
 @interface Texture2D : Resource {
     unsigned int texture;

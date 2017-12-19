@@ -104,10 +104,12 @@
 			userInfo:nil];
 	}
 	
+	/*	*/
 	const int nVectors = width * height;
 	field = (hpmvec4f*)malloc(nVectors * sizeof(hpmvec4f));
 	assert(field);
 	
+	/*	*/
 	for(i = 0; i < height; i++){
 		for(j = 0; j < width; j++){
 			hpmvec4f* ve = &field[i * height + j];
@@ -140,8 +142,8 @@
 	/*  Check ofr null references.  */
 	if(desc == NULL){
 		@throw [NSException exceptionWithName:@"NSNullReferenceException"
-				reason:@"geometry description is null"
-				userInfo:nil];
+			reason:@"geometry description is null"
+			userInfo:nil];
 	}
 
 	/*  Check description is valid.  */

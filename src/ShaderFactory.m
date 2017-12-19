@@ -117,9 +117,9 @@
 		GLchar errorlog[2048];
 		glGetProgramInfoLog(program, sizeof(errorlog), &len, &errorlog[0]);
 		@throw [NSException 
-				exceptionWithName:@"NSErrorException"
-				reason:[[NSString stringWithFormat:@"Linked failed - %s", errorlog] autorelease]
-				userInfo:nil];
+			exceptionWithName:@"NSErrorException"
+			reason:[[NSString stringWithFormat:@"Linked failed - %s", errorlog] autorelease]
+			userInfo:nil];
 	}
 
 	/*	Validate status of the shader.	*/
@@ -130,9 +130,9 @@
 		glGetProgramInfoLog(program, sizeof(errorlog), &len, &errorlog[0]);
 		/*		*/
 		@throw [NSException 
-				exceptionWithName:@"NSErrorException"
-				reason:[NSString stringWithUTF8String:errorlog]
-				userInfo:nil];
+			exceptionWithName:@"NSErrorException"
+			reason:[NSString stringWithUTF8String:errorlog]
+			userInfo:nil];
 	}
 
 	/*	Enable backward compatibility.	*/
@@ -172,9 +172,9 @@
 		GLchar infolog[2048];
 		glGetShaderInfoLog(shader, sizeof(infolog), NULL, infolog);
 		@throw [NSException 
-				exceptionWithName:@"NSErrorException"
-				reason:[[NSString stringWithFormat:@"Failed compiling shader object - %s", infolog] autorelease]
-				userInfo:nil];
+			exceptionWithName:@"NSErrorException"
+			reason:[[NSString stringWithFormat:@"Failed compiling shader object - %s", infolog] autorelease]
+			userInfo:nil];
 	}
 	
 	return shader;

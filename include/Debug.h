@@ -19,6 +19,7 @@
 #ifndef _VF_DEBUG_H_
 #define _VF_DEBUG_H_ 1
 #import<Foundation/Foundation.h>
+#include<GL/glew.h>
 
 /**
  *  Class responsible for handling
