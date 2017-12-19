@@ -106,7 +106,7 @@
 		if(err == ZIP_ER_NOENT){
 			@throw [NSException
 			exceptionWithName:@"NSFileNotFoundException"
-			reason:[NSString stringWithUTF8String:buf]
+			reason:[NSString stringWithFormat:@"%s - %s", path, buf]
 			userInfo:nil];
 		}else{
 			@throw [NSException
