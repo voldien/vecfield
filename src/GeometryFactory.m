@@ -37,6 +37,7 @@
 +(Geometry*) createParticleBundle: (int) width: (int) height: (int) density{
 
 	int i,j,k;
+	const float PI = 3.141592654;
 	Geometry* geometry;
 	VFParticle* particles;
 	VFGeometryDesc desc = {0};
@@ -63,12 +64,13 @@
 			for(k = 0; k < density; k++){
 				VFParticle* p = &particles[i * height * density + j * density + k];
 				const float delta = (float)k / (float)density;
+				const float m = 2 * PI * (rand() / INT_MAX);
 
 				/*	Particle position and init velocity.	*/
-				p->y = i - (height / 2) + delta;
-				p->x = j - (width / 2) + delta;
-				p->xdir = 0;
-				p->ydir = 0;
+				p->y = j + delta;
+				p->x = i + delta;
+				p->xdir = cos(m);
+				p->ydir = sin(m);
 			}
 		}
 	}
