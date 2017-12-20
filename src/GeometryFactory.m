@@ -163,16 +163,33 @@
 		/*  Vertices buffer.	*/
 		glGenBuffersARB(1, &init.vbo);
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, init.vbo);
-		glBufferDataARB(GL_ARRAY_BUFFER_ARB, desc->numVerticecs * desc->vertexStride, desc->buffer, GL_STATIC_READ_ARB);
+		glBufferDataARB(GL_ARRAY_BUFFER_ARB, desc->numVerticecs * desc->vertexStride, NULL, GL_STATIC_READ_ARB);
 
 		/*	Indices buffer.	*/
 		glGenBuffersARB(1, &init.ibo);
 		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, init.ibo);
-		glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, desc->numIndices * desc->indicesStride, desc->indices, GL_STATIC_DRAW_ARB);
-	}else{	/*	*/
+		glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, desc->numIndices * desc->indicesStride, NULL, GL_STATIC_DRAW_ARB);
+
+		GLvoid* parr = glMapBufferARB(GL_ARRAY_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+		memcpy(parr, desc->buffer, desc->numVerticecs * desc->vertexStride);
+
+		GLvoid* pindices = glMapBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+		memcpy(pindices, desc->indices, desc->numIndices * desc->indicesStride);
+
+		glUnmapBufferARB(GL_ARRAY_BUFFER_ARB);
+		glUnmapBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB);
+		
+	}else{
+		/*	*/
 		glGenBuffersARB(1, &init.vbo);
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, init.vbo);
 		glBufferDataARB(GL_ARRAY_BUFFER_ARB, desc->numVerticecs * desc->vertexStride, desc->buffer, GL_STREAM_DRAW_ARB);
+
+		/*	*/
+		GLvoid* parr = glMapBufferARB(GL_ARRAY_BUFFER_ARB, GL_WRITE_ONLY_ARB);
+		memcpy(parr, desc->buffer, desc->numVerticecs * desc->vertexStride);
+
+		glUnmapBufferARB(GL_ARRAY_BUFFER_ARB);
 	}
 
 	/*  */
