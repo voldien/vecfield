@@ -79,7 +79,6 @@
 		*pbuf = realloc(*pbuf, nbytes + 1);
 		((char*)(*pbuf))[nbytes] = '\0';
 	}
-	
 	return nbytes;
 }
 
