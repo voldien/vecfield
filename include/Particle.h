@@ -16,8 +16,8 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#ifndef _PARTICLE_H_
-#define _PARTICLE_H_ 1
+#ifndef _VF_PARTICLE_H_
+#define _VF_PARTICLE_H_ 1
 #import"Resource.h"
 
 /**
