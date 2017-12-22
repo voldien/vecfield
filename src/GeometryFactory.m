@@ -172,13 +172,14 @@
 		glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, init.ibo);
 		glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, desc->numIndices * desc->indicesStride, NULL, GL_STATIC_DRAW_ARB);
 
+		/*	*/
 		GLvoid* parr = glMapBufferARB(GL_ARRAY_BUFFER_ARB, GL_WRITE_ONLY_ARB);
 		memcpy(parr, desc->buffer, desc->numVerticecs * desc->vertexStride);
+		glUnmapBufferARB(GL_ARRAY_BUFFER_ARB);
 
+		/*	*/
 		GLvoid* pindices = glMapBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, GL_WRITE_ONLY_ARB);
 		memcpy(pindices, desc->indices, desc->numIndices * desc->indicesStride);
-
-		glUnmapBufferARB(GL_ARRAY_BUFFER_ARB);
 		glUnmapBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB);
 		
 	}else{
