@@ -44,11 +44,11 @@ void main(void){
 	for(i = 0; i < gl_in.length(); i++){
 		for(j = 0; j < noffsets; j++){
 
-			/*	*/
-			const float invZoom = 1.0f / zoom + zoom * (1.0f / 200);
+			/*	Compute inverse zoom - expressed as a polynominal.	*/
+			const float invZoom = (1.0f / zoom + zoom * (1.0f / 150.0f)) * 0.5f;
 			const vec3 particlePos = vec3(gl_in[i].gl_Position.xy, 0.0) + polyoffset[j] * invZoom;
 
-			/*	*/
+			/*	Velocity.	*/
 			const vec2 velocity = gl_in[i].gl_Position.zw;
 
 			/*	*/
