@@ -38,7 +38,7 @@
  * @returns float, 2D array of R^2 vectors.
  * @throws NSInvalidArgumentException if width or height is less than 1.
  */
-+(float*) generateGradient:(int) width: (int) height;
++(uint8_t*) generateGradient:(int) width: (int) height;
 
 /**
  * Compute perlin noise for at x and y.
