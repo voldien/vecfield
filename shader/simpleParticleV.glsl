@@ -4,8 +4,10 @@ layout(location = 0) in vec4 vertex;
 attribute vec3 vertex;
 #endif
 
+/*	*/
 uniform mat4 view;
 
+/*	*/
 #if __VERSION__ > 120
 smooth out vec4 vColor;
 #else
