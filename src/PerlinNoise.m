@@ -17,7 +17,6 @@ static const float gradiant[][2] = {
 };
 const int numGrad = sizeof(gradiant) / sizeof(gradiant[0]);
 
-
 static float lerp(float a0, float a1, float w) {
 	return (1.0 - w)*a0 + w*a1;
 }

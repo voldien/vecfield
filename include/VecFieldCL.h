@@ -29,6 +29,7 @@
 @interface VecFieldCL
 
 /**
+ * Get OpenCL error string.
  * @return non-null context.
  */
 +(const char*) getCLStringError: (unsigned int) errorcode;

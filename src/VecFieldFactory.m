@@ -49,9 +49,7 @@ ZipFile* shaderZip = nil;
 	
 	/*  Create particles.	*/
 	field->geoParticles = [GeometryFactory createParticleBundle: field->options->width: field->options->height: field->options->particles];
-	
 
-	
 	/*  Create CL Program.	*/
 	field->program = [VecFieldCL createProgram: field->context: field->numDevices: field->devices: clfile];
 	field->clfunc = [VecFieldCL createKernel: field->program: "simulate"];
