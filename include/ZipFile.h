@@ -35,27 +35,29 @@
 -(void) release;
 
 /**
- *  Read file inside zfile by cpath.
+ * Read file inside zfile by cpath.
  * 
- *  @return number of bytes loaded.
- *  @throw NSFileNotFoundException if file does not exists.
+ * @return number of bytes loaded.
+ * @throw NSNullReferenceException
+ * @throw NSErrorException
+ * @throw NSFileNotFoundException if file does not exists.
  */
 -(long int) readFile: (const char*) cpath: (void**) pbuf;
 
 /**
- *  Read string from inside zfile by cpath.
+ * Read string from inside zfile by cpath.
  * 
- *  @return number of bytes loaded.
- *  @throw NSFileNotFoundException if file does not exists.
+ * @return number of bytes loaded.
+ * @throw NSFileNotFoundException if file does not exists.
  */
 -(long int) readString: (const char*) cpath: (void**) pbuf;
 
 /**
- *  Create ZipFile object by creating
- *  a valid path. 
- *  @return non-null terminated object.
- *  @throws NSFileNotFoundException if file does not exists.
- *  @throws NSNullReferenceException if path is a null pointer references.
+ * Create ZipFile object by creating
+ * a valid path. 
+ * @return non-null terminated object.
+ * @throws NSFileNotFoundException if file does not exists.
+ * @throws NSNullReferenceException if path is a null pointer references.
  */
 +(ZipFile*) loadFile: (const char*) path;
 

@@ -21,7 +21,7 @@
 #import"Resource.h"
 
 /**
- * Particle
+ * Particle.
  */
 typedef struct vf_particle_t{
     float x,y;
