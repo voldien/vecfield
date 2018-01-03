@@ -53,6 +53,7 @@ FILE(GLOB SHADER_CL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cl)
 
 # Define main target.
 ADD_EXECUTABLE(vecfield ${SOURCE_FILES})
+ADD_DEPENDENCIES(vecfield shaders)
 TARGET_LINK_LIBRARIES(vecfield -lgnustep-base -lOpenCL -lobjc -lGL -lGLEW -lSDL2 -lfreeimage -lz -lzip -lhpm -lm)
 INSTALL(TARGETS vecfield DESTINATION bin)
 
