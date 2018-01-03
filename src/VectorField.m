@@ -30,9 +30,13 @@
 	for(y = 0; y < height; y++){
 		for(x = 0; x < width; x++){
 			const float theta = perlin[y * height + x];
-
-			vectorfield[y * height * 2 + x * 2 + 0] = cos(theta);
-			vectorfield[y * height * 2 + x * 2 + 1] = sin(theta);
+			
+			/*	amplitude.	*/
+			const float amplitude = 1.0f; //(perlin[y* height + (x + 1) % width] - theta) * 10;
+			
+			/*	*/
+			vectorfield[y * height * 2 + x * 2 + 0] = cos(theta) * amplitude;
+			vectorfield[y * height * 2 + x * 2 + 1] = sin(theta) * amplitude;
 		}
 	}
 
