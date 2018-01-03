@@ -32,6 +32,18 @@
  */
 +(void) enableGLDebug;
 
+/**
+ * Get OpenCL notification callback for errors.
+ * @return non-null function pointer.
+ */
++(const void*) getPfnNotifyCallBack;
+
+/**
+ * Get OpenGL debug callback.
+ * @return non-null function pointer.
+ */
++(const void*) getGLDebugCallBack;
+
 @end
 
 #endif 

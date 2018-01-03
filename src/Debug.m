@@ -1,8 +1,8 @@
 #import"Debug.h"
-#include<GL/glew.h>
+#include<stdio.h>
 
 void callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity,
-		GLsizei length, const GLchar* message, GLvoid* userParam) {
+GLsizei length, const GLchar* message, GLvoid* userParam){
 
 	char* sourceString;
 	char* typeString;
@@ -105,10 +105,26 @@ void callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity,
 	printf("\n");
 }
 
+void*pfn_notify(const char* errinfo, const void* private_info, size_t cb, void* user_data){
+	fprintf(stderr, "OpenCL Error (via pfn_notify) - %s\n", errinfo);
+}
+
 @implementation Debug
 
-+(void) enableGLDebug{
 
++(const void*) getPfnNotifyCallBack{
+	return pfn_notify;
+}
+
++(const void*) getGLDebugCallBack{
+	return callback_debug_gl;
+}
+
++(void) enableGLDebug{
+	
+	const void* pcallback = [Debug getGLDebugCallBack];
+	assert(pcallback);
+	
 	/*	Check if debug callback is supported.	*/
 	if (!glDebugMessageCallbackAMD && !glDebugMessageCallbackARB){
 		fprintf(stderr, "Failed loading OpenGL callback functions.\n");
@@ -117,10 +133,10 @@ void callback_debug_gl(GLenum source, GLenum type, GLuint id, GLenum severity,
 
 	/*	Set Debug message callback.	*/
 	if(glDebugMessageCallbackARB){
-		glDebugMessageCallbackARB((GLDEBUGPROCARB)callback_debug_gl, NULL);
+		glDebugMessageCallbackARB((GLDEBUGPROCARB)pcallback, NULL);
 	}
 	if(glDebugMessageCallbackAMD){
-		glDebugMessageCallbackAMD((GLDEBUGPROCAMD)callback_debug_gl, NULL);
+		glDebugMessageCallbackAMD((GLDEBUGPROCAMD)pcallback, NULL);
 	}
 
 	/*	Enable debug.    */
