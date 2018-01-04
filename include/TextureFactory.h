@@ -41,6 +41,13 @@
  */
 +(Texture2D*) createCircleTexture: (int) width: (int) height;
 
+/**
+ * Create grid texture.
+ * @return non-null texture object.
+ * @throw NSInvalidArgumentException if with or height is less than 1.
+ */
++(Texture2D*) createGridTexture: (int) width: (int) height;
+
 @end
 
 #endif

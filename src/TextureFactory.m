@@ -90,4 +90,51 @@
 	return texture;
 }
 
++(Texture2D*) createGridTexture: (int) width: (int) height{
+
+	int x,y;
+	int cx = width / 2;
+	int cy = height / 2;
+	uint32_t* pixels;
+	const int stride = sizeof(uint32_t);
+	Texture2D* texture;
+
+	/*  Check if argument is valid. */
+	if(width < 1 || height < 1){
+		@throw [NSException
+			exceptionWithName:@"NSInvalidArgumentException"
+			reason:@"width and height must be greater than 0"
+			userInfo:nil];
+	}
+
+	/*  Allocate pixel block.   */
+	pixels = (uint32_t*)malloc(width * height * sizeof(uint32_t));
+	assert(pixels);
+
+	/*  Iterate through each pixel. */
+	for(y = 0; y < height; y++){
+		for(x = 0; x < width; x++){
+			pixels[y* height + x] = (x < width / 512 || y < height / 512 ? UINT_MAX : 255);
+		}
+	}
+
+	/*  Create texture.	*/
+	texture = [TextureFactory createTexture: width: height: pixels];
+	free(pixels);
+	
+	[texture bind: 0];
+	/*	Clamp UV corrdinates.	*/
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_R, GL_REPEAT);
+	
+	/*  Bilinear interploation on the pixel colors. */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST_MIPMAP_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	
+
+	return texture;
+}
+
 @end
