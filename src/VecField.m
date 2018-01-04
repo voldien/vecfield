@@ -113,7 +113,7 @@
 	
 	/*	*/
 	
-	/*	*/
+	/*	Init values.	*/
 	ntime = SDL_GetPerformanceCounter();
 	SDL_GetWindowSize(self->window, &width, &height);
 	screen[0] = width;
@@ -128,6 +128,8 @@
 	hpm_mat4x4_translationfv(translation, &cameraPos);
 	hpm_mat4x4_identityfv(view);
 
+	/*	*/
+	[self->texCircle bind: 0];
 	
 	/*  */
 	while(1){
@@ -259,7 +261,6 @@
 				[self->shadParticle bind];
 			else
 				[self->shadSimpleParticle bind];
-			[self->texCircle bind: 0];
 			[self->geoParticles bind];
 			[self->geoParticles draw];
 
@@ -372,6 +373,7 @@
 	/*	Enable debug context.	*/
 	if(self->options->debug)
 		SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS, SDL_GL_GetAttribute(SDL_GL_CONTEXT_FLAGS, &glvalue) | SDL_GL_CONTEXT_DEBUG_FLAG);
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, SDL_TRUE);
 	
 	/*  Create context.*/
 	SDL_GLContext pcontext = SDL_GL_CreateContext(self->window);

@@ -136,7 +136,7 @@
 	}
 
 	/*	Enable backward compatibility.	*/
-	glBindAttribLocationARB(program, 0,  "vertex");
+	glBindAttribLocationARB(program, 0, "vertex");
 	glBindFragDataLocation(program, 0, "fragColor");
 	
 	/*  Release shader resources once linked.   */
