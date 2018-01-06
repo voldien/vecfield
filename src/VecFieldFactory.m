@@ -39,16 +39,18 @@ ZipFile* shaderZip = nil;
 	/*  Set constant uniform.	*/
 	[field->shadParticle setUniformi: [field->shadParticle getUniformLocation:"tex0"]: 0];
 	[field->shadParticle setUniformf: [field->shadParticle getUniformLocation:"zoom"]: 1.0f];
+	[field->shadGrid setUniformi: [field->shadGrid getUniformLocation:"tex1"]: 1];
 	
 	/*  Create textures.    */
-	const int circleSize = 1024;
-	field->texCircle = [TextureFactory createCircleTexture: circleSize: circleSize];
+	const int texSize = 1024;
+	field->texCircle = [TextureFactory createCircleTexture: texSize: texSize];
+	field->texGrid = [TextureFactory createGridTexture: texSize: texSize];
 	
 	/*  Create Grid Plane.    */
 	field->geoGridPlane = [GeometryFactory createNormalizedQuad];
 	
 	/*  Create particles.	*/
-	field->geoParticles = [GeometryFactory createParticleBundle: field->options->width: field->options->height: field->options->particles];
+	field->geoParticles = [GeometryFactory createParticleBundle: field->options->width: field->options->height: field->options->density];
 
 	/*  Create CL Program.	*/
 	field->program = [VecFieldCL createProgram: field->context: field->numDevices: field->devices: clfile];

@@ -6,12 +6,11 @@ static void defaultOptions(VecFieldOptions* options){
 	options->fullscreen = 0;
 	options->debug = 0;
 	options->verbose = 0;
-	options->particles = 1;
 	options->width = 512;
 	options->height = 512;
 	options->bgrendering = 0;
 	options->vsync = 0;
-
+	options->density = 1;
 }
 
 @implementation Opt : NSObject

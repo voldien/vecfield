@@ -27,9 +27,8 @@ typedef struct vecfield_option_t{
 	int vsync;			/*	Vertical sync.	*/
 	int debug;			/*  Debug mode. */
 	int verbose;		/*	Verbose mode.	*/
-	int particles;		/*  Number of particles.    */
-	int width;			/*  Init width of the window.   */
-	int height;			/*  Init height of the window.  */
+	int width;			/*  Init width of the particle window.   */
+	int height;			/*  Init height of the particle window.  */
 	int density;		/*	Particle density.	*/
 	int bgrendering;	/*  Enable background rendering/computing.  */
 }VecFieldOptions;

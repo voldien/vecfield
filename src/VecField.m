@@ -130,6 +130,7 @@
 
 	/*	*/
 	[self->texCircle bind: 0];
+	[self->texGrid bind: 1];
 	
 	/*  */
 	while(1){

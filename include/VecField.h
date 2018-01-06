@@ -45,6 +45,7 @@ extern ZipFile* shaderZip;
 	Shader* shadSimpleParticle;
 	Shader* shadVectorField;
 	Texture2D* texCircle;
+	Texture2D* texGrid;
 	Geometry* geoParticles;
 	Geometry* geoGridPlane;
 	Geometry* geoVectorField;
