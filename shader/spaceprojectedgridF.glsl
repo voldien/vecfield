@@ -33,11 +33,12 @@ float resultHorVer(const in vec3 pos, float scale){
 vec4 computeColor(){
 
 	/*	constants.	*/
+	const float zoomLevel = 68.0;
 	const float grid1Intensity = 0.75;
 	const float grid2Intensity = 0.45;
 
 	/*	*/
-	const float zscale = (68.0 - zoom);
+	const float zscale = (zoomLevel - zoom);
 	const vec3 pos1 = (view * vec4(vVertex, 0.0)).xyz;
 	const vec3 pos2 = (view * vec4(vVertex, 0.0)).xyz + (view * vec4(0.5,0.5,0,0)).xyz;
 
