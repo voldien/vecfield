@@ -114,7 +114,7 @@
 	/*  Iterate through each pixel. */
 	for(y = 0; y < height; y++){
 		for(x = 0; x < width; x++){
-			pixels[y* height + x] = (x < width / 512 || y < height / 512 ? UINT_MAX : 255);
+			pixels[y* height + x] = (x < width / 512 || y < height / 512 ? UINT_MAX : 0);
 		}
 	}
 

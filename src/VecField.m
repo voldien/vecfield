@@ -97,7 +97,7 @@
 	Motion motion;
 	float delta = 1.0f;
 	const float maxZoom = 64.0f;
-	const float minZoom = 0.01;
+	const float minZoom = 0.8;
 	Uint64 ntime;
 	
 	/*	*/
@@ -244,6 +244,7 @@
 			
 			/*  Draw grid.  */
 			glDisable(GL_BLEND);
+			glDisable(GL_CULL_FACE);
 			[self->shadGrid bind];
 			[self->geoGridPlane bind];
 			[self->geoGridPlane draw];
@@ -280,22 +281,24 @@
 	/*  Update simulation.  */
 	cl_int err;
 	cl_uint i;
-	const int nArgs = 6;
+	const int nArgs = 7;
 	const size_t nArgSize[] = {
 		sizeof(cl_mem),		/*	*/
 		sizeof(cl_mem),		/*	*/
 		sizeof(cl_int2),	/*	*/
 		sizeof(cl_int2),	/*	*/
-		sizeof(float),		/*	*/
+		sizeof(cl_float),	/*	*/
+		sizeof(cl_int),		/*	*/
 		sizeof(*motion),	/*	*/
 	};
 	const void* hostArgRef[] = {
-		&self->clparticles,		/*	*/
-		&self->vectorfield,		/*	*/
-		&self->options->width,	/*	*/
-		&self->options->width,	/*	*/
-		&delta,					/*	*/
-		motion,					/*	*/
+		&self->clparticles,			/*	*/
+		&self->vectorfield,			/*	*/
+		&self->options->width,		/*	*/
+		&self->options->width,		/*	*/
+		&delta,						/*	*/
+		&self->options->density,	/*	*/
+		motion,						/*	*/
 	};
 	
 	/*	Aquire OpenGL buffer from OpenGL.	*/
@@ -312,12 +315,12 @@
 		}
 	}
 	
-	/*	*/
-	const size_t global[2] = {options->width / 4, options->height / 4};
+	/*	Work items and works groups.	*/
+	const size_t global[2] = {options->width / 2, options->height / 2};
 	const size_t local[2] = {2, 2};
 	
 	/*	Execute particle simulatin.	*/
-	err = clEnqueueNDRangeKernel(self->clqueue, self->clfunc, 2, NULL, global, local, 0, 0, 0);
+	err = clEnqueueNDRangeKernel(self->clqueue, self->clfunc, 2, NULL, global, NULL, 0, 0, 0);
 	if(err != CL_SUCCESS){
 		@throw [NSException
 			exceptionWithName:@"NSErrorException"
