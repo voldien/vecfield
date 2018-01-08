@@ -69,7 +69,7 @@ float2 computeMotionInfluence(float4 particle, struct motion_t* motion){
 /**
 * Perform particle simulation with vector field.
 */
-__kernel void simulate(__global float4* particles, __global const float2* vectorfield, int2 particleBox, int2 vectorBox, float deltatime, struct motion_t motion){
+__kernel void simulate(__global float4* particles, __global const float2* vectorfield, int2 particleBox, int2 vectorBox, float deltatime, int density, struct motion_t motion){
 	
 
 	/*	*/
@@ -90,8 +90,9 @@ __kernel void simulate(__global float4* particles, __global const float2* vector
 	const int gw = get_global_size(0);
 	const int gh = get_global_size(1);
 	
-	const int nlw = 2;
-	const int nhw = 2;
+	/*	Group.	*/
+	const int nlw = 2 * density;
+	const int nhw = 2 * density;
 	
 	/*  Iterate through each particle in block.  */
 	for(y = 0; y < nhw; y++){
@@ -116,11 +117,14 @@ __kernel void simulate(__global float4* particles, __global const float2* vector
 			/*  Compute the force.  */
 			force = (velocity + forceInf + motionInf);
 			
-			/*  Check for edge collision.    */
-			
 			/*  Add force to particle position. */
 			part->zw = force * invMass;
 			part->xy = pos.xy + part->zw * deltatime;
+			
+			/*  Check for edge collision.    */
+			//float infl = select(part->xy, max, isgreater(motion->radius, dist));
+			
+			
 			part->xy = clamp(part->xy, min, max);
 		}
 	}
