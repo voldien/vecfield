@@ -66,6 +66,7 @@
 		
 	/*	Release objects.	*/
 	self->texCircle = nil;
+	self->texCircle = nil;
 	self->geoParticles = nil;
 	self->geoGridPlane = nil;
 	self->shadGrid = nil;
@@ -281,15 +282,14 @@
 	/*  Update simulation.  */
 	cl_int err;
 	cl_uint i;
-	const int nArgs = 7;
 	const size_t nArgSize[] = {
-		sizeof(cl_mem),		/*	*/
-		sizeof(cl_mem),		/*	*/
+		sizeof(cl_mem),		/*	Particle memory.	*/
+		sizeof(cl_mem),		/*	Vector Field memory.	*/
 		sizeof(cl_int2),	/*	*/
 		sizeof(cl_int2),	/*	*/
-		sizeof(cl_float),	/*	*/
-		sizeof(cl_int),		/*	*/
-		sizeof(*motion),	/*	*/
+		sizeof(cl_float),	/*	delta time.	*/
+		sizeof(cl_int),		/*	particle density.	*/
+		sizeof(*motion),	/*	pointer motion.	*/
 	};
 	const void* hostArgRef[] = {
 		&self->clparticles,			/*	*/
@@ -300,6 +300,7 @@
 		&self->options->density,	/*	*/
 		motion,						/*	*/
 	};
+	const int nArgs = sizeof(nArgSize) / sizeof(nArgSize[0]);
 	
 	/*	Aquire OpenGL buffer from OpenGL.	*/
 	[VecFieldCL aquireGLObject: self->clqueue: self->clparticles];

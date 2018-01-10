@@ -111,7 +111,6 @@ void*pfn_notify(const char* errinfo, const void* private_info, size_t cb, void* 
 
 @implementation Debug
 
-
 +(const void*) getPfnNotifyCallBack{
 	return pfn_notify;
 }

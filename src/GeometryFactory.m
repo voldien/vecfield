@@ -37,7 +37,7 @@
 +(Geometry*) createParticleBundle: (int) width: (int) height: (int) density{
 
 	int i,j,k;
-	const float PI = 3.141592654;
+	const float PI = 3.14159265359f;
 	Geometry* geometry;
 	VFParticle* particles;
 	VFGeometryDesc desc = {0};
