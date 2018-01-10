@@ -1,10 +1,22 @@
 #import<Foundation/Foundation.h>
 #import"Shader.h"
+#include<stdio.h>
 #include<GL/glew.h>
+
+static Shader* prevShader = nil;
+static void getCurrentShader(Shader* shader){
+	GLint program;
+	if(prevShader == nil)
+		prevShader = [Shader alloc];
+	glGetIntegerv(GL_CURRENT_PROGRAM, &program);
+	[shader initWithProgram: program];
+}
 
 @implementation Shader : Resource{
 	unsigned int program;
 }
+
+
 
 -(id) initWithProgram: (int) glprogram{
 	self = [super init];
@@ -44,8 +56,10 @@
 		glProgramUniform1i(self->program, location, pvalue);
 	}
 	else{
+		getCurrentShader(prevShader);
 		[self bind];
 		glUniform1iARB(location, pvalue);
+		[prevShader bind];
 	}
 }
 
@@ -54,8 +68,10 @@
 		glProgramUniform1f(self->program, location, pvalue);
 	}
 	else{
+		getCurrentShader(prevShader);
 		[self bind];
 		glUniform1fARB(location, pvalue);
+		[prevShader bind];
 	}
 }
 
@@ -64,8 +80,10 @@
 		glProgramUniform2fv(self->program, location, 1, pvalue);
 	}
 	else{
+		getCurrentShader(prevShader);
 		[self bind];
 		glUniform2fvARB(location, 1, pvalue);
+		[prevShader bind];
 	}
 }
 
@@ -74,8 +92,10 @@
 		glProgramUniformMatrix4fv(self->program, location,  1, GL_FALSE, (const GLfloat*)pvalue);
 	}
 	else{
+		getCurrentShader(prevShader);
 		[self bind];
 		glUniformMatrix4fvARB(location, 1, GL_FALSE, (const GLfloat*)pvalue);
+		[prevShader bind];
 	}
 }
 
