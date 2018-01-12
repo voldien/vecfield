@@ -9,6 +9,15 @@
 
 	int x, y;
 	const int blocksize = width * height * 2 * sizeof(float);
+	const hpmvec2f lt = {1.0f, -1.0f};
+	const hpmvec2f rt = {-1.0f, -1.0f};
+	const hpmvec2f lb = {1.0f, 1.0f};
+	const hpmvec2f rb = {-1.0f, 1.0f};
+	
+	const hpmvec2f left = {1,0};
+	const hpmvec2f right = {-1,0};
+	const hpmvec2f top = {0,-1};
+	const hpmvec2f bottom = {0,1};
 
 	/*	Check arguments.	*/
 	if(width < 1 || height < 1){
@@ -39,6 +48,32 @@
 			vectorfield[y * height + x][1] = sin(theta) * amplitude;
 		}
 	}
+	
+	/*	Bottom and top edges.	*/
+	y = 0;
+	for(x = 0; x < width; x++){
+		vectorfield[(y * height) + x] = bottom;
+	}
+	y = height - 1;
+	for(x = 0; x < width; x++){
+		vectorfield[y * height + x] = top;
+	}
+	
+	/*	Left and right edges.	*/
+	x = 0;
+	for(y = 0; y < height; y++){
+		vectorfield[y * height + x] = left;
+	}
+	x = width - 1;
+	for(y = 0; y < height; y++){
+		vectorfield[y * height + x] = right;
+	}
+	
+	/*	Corners.	*/
+	vectorfield[0] = lb;
+	vectorfield[width - 1] = rb;
+	vectorfield[(height -1) * width] = lt;
+	vectorfield[width * height] = rt;
 
 	free(perlin);
 	return (float*)vectorfield;
