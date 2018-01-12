@@ -118,7 +118,7 @@
 			hpmvec4f* ve = &field[i * height + j];
 			const hpmvec2f* dir = &pvector[i * height + j];
 			/*	*/
-			hpm_vec4_setf(ve, (float)i, (float)j, (*dir)[0], (*dir)[1]);
+			hpm_vec4_setf(ve, (float)j, (float)i, (*dir)[0], (*dir)[1]);
 		}
 	}
 	
