@@ -67,8 +67,8 @@
 				const float m = 2 * PI * (rand() / INT_MAX);
 
 				/*	Particle position and init velocity.	*/
-				p->y = j + delta;
-				p->x = i + delta;
+				p->y = i + delta;
+				p->x = j + delta;
 				p->xdir = cos(m);
 				p->ydir = sin(m);
 			}
