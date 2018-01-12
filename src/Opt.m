@@ -17,7 +17,7 @@ static void defaultOptions(VecFieldOptions* options){
 
 +(void) readArguments:(int) argc: (const char**) argv:(VecFieldOptions*) option{
 
-	const char* shortopt = "vVdf";
+	const char* shortopt = "vVdf_";
 	static struct option longoption[] = {
 		{"version",			no_argument,		0, 'v'},	/*	Print version.	*/
 		{"debug",			no_argument,		0, 'd'},	/*	Enable debug mode.	*/

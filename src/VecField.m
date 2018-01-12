@@ -250,13 +250,6 @@
 			[self->geoGridPlane bind];
 			[self->geoGridPlane draw];
 			
-			/*	Draw vector field.	*/
-			if(options->debug){
-				[self->shadVectorField bind];
-				[self->geoVectorField bind];
-				[self->geoVectorField draw];
-			}
-			
 			/*  Draw particles. */
 			glEnable(GL_BLEND);
 			glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -266,6 +259,13 @@
 				[self->shadSimpleParticle bind];
 			[self->geoParticles bind];
 			[self->geoParticles draw];
+			
+			/*	Draw vector field.	*/
+			if(options->debug){
+				[self->shadVectorField bind];
+				[self->geoVectorField bind];
+				[self->geoVectorField draw];
+			}
 
 			/*	Swap framebuffer.	*/
 			SDL_GL_SwapWindow(self->window);

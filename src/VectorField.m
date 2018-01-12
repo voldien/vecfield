@@ -19,7 +19,7 @@
 	}
 
 	/*  Allocate vector field.  */
-	float* vectorfield = (float*)malloc(blocksize);
+	hpmvec2f* vectorfield = (hpmvec2f*)malloc(blocksize);
 	assert(vectorfield);
 
 	/*  Generate perlin noise.  */
@@ -35,13 +35,13 @@
 			const float amplitude = 1.0f; //(perlin[y* height + (x + 1) % width] - theta) * 10;
 			
 			/*	*/
-			vectorfield[y * height * 2 + x * 2 + 0] = cos(theta) * amplitude;
-			vectorfield[y * height * 2 + x * 2 + 1] = sin(theta) * amplitude;
+			vectorfield[y * height + x][0] = cos(theta) * amplitude;
+			vectorfield[y * height + x][1] = sin(theta) * amplitude;
 		}
 	}
 
 	free(perlin);
-	return vectorfield;
+	return (float*)vectorfield;
 }
 
 @end

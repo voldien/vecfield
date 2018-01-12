@@ -97,6 +97,7 @@
 	Geometry* geometry;
 	hpmvec4f* field;
 	VFGeometryDesc desc = {0};
+	const hpmvec2f* pvector = (const hpmvec2f*)vector;
 	
 	/*	Check argument is valid.	*/
 	if(width <= 0 || height <= 0){
@@ -106,7 +107,7 @@
 			userInfo:nil];
 	}
 	
-	/*	*/
+	/*	Allocate vector field geometry.	*/
 	const int nVectors = width * height;
 	field = (hpmvec4f*)malloc(nVectors * sizeof(hpmvec4f));
 	assert(field);
@@ -115,9 +116,9 @@
 	for(i = 0; i < height; i++){
 		for(j = 0; j < width; j++){
 			hpmvec4f* ve = &field[i * height + j];
-			const float* dir = &vector[i * height * 2 + j * 2];
-			
-			hpm_vec4_setf(ve, (float)i, (float)j, dir[0], dir[1]);
+			const hpmvec2f* dir = &pvector[i * height + j];
+			/*	*/
+			hpm_vec4_setf(ve, (float)i, (float)j, (*dir)[0], (*dir)[1]);
 		}
 	}
 	
