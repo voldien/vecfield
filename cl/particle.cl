@@ -72,7 +72,7 @@ float2 computeMotionInfluence(float4 particle, struct motion_t* motion){
 __kernel void simulate(__global float4* particles, __global const float2* vectorfield, int2 particleBox, int2 vectorBox, float deltatime, int density, struct motion_t motion){
 	
 
-	/*	*/
+	/*	Particle mass.	*/
 	const float mass = 1.0f;
 	const float invMass = 1.0f / mass;
 	
@@ -91,13 +91,13 @@ __kernel void simulate(__global float4* particles, __global const float2* vector
 	const int gh = get_global_size(1);
 	
 	/*	Group.	*/
-	const int nlw = 2 * density;
 	const int nhw = 2 * density;
+	const int nlw = 2 * density;
 	
 	/*  Iterate through each particle in block.  */
 	for(y = 0; y < nhw; y++){
 		/*	Cache particles.	*/
-		const int prow = nhw * (gy + y) * gw + gx * nlw;
+		const int prow = ((nhw * gy) * (gw * nhw)) + (y * gw * nlw) + (gx * nlw);
 		prefetch(&particles[prow], nlw);
 
 		/*	*/

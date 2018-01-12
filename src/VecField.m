@@ -318,7 +318,6 @@
 	
 	/*	Work items and works groups.	*/
 	const size_t global[2] = {options->width / 2, options->height / 2};
-	const size_t local[2] = {2, 2};
 	
 	/*	Execute particle simulatin.	*/
 	err = clEnqueueNDRangeKernel(self->clqueue, self->clfunc, 2, NULL, global, NULL, 0, 0, 0);
