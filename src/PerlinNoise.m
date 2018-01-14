@@ -131,8 +131,8 @@ static float lerp(float a0, float a1, float w) {
 	float dy = y - (float)iy;
 	
 	/*	Fetch gradient vector.	*/
-	const float v0 = gradiant[ grad[iy * YMAX * 2 + 2 * ix] ][0];
-	const float v1 = gradiant[ grad[iy * YMAX * 2 + 2 * ix] ][1];
+	const float v0 = gradiant[ grad[(iy * YMAX * 2) + (2 * ix)] ][0];
+	const float v1 = gradiant[ grad[(iy * YMAX * 2) + (2 * ix)] ][1];
 	
 	/*	*/
 	return (dx*v0 + dy*v1);
