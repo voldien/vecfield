@@ -1,12 +1,17 @@
 #import"PerlinNoise.h"
+#import"VecDef.h"
 #include<Foundation/Foundation.h>
 #include<hpm/hpm.h>
 #include<assert.h>
 #include<stdio.h>
 #include<time.h>
 
-const int XMAX = 128;
-const int YMAX = 128;
+/*	TODO fix!.	*/
+const int XMAX = 512;
+const int YMAX = 512;
+const int octave = 6;
+float amplitude = 2.0f;
+float persistance = 0.50f;
 static uint8_t* grad = NULL;
 
 static const float gradiant[][2] = {
@@ -17,8 +22,8 @@ static const float gradiant[][2] = {
 };
 const int numGrad = sizeof(gradiant) / sizeof(gradiant[0]);
 
-static float lerp(float a0, float a1, float w) {
-	return (1.0 - w)*a0 + w*a1;
+VF_ALWAYS_INLINE static float lerp(float a0, float a1, float w) {
+	return (1.0f - w)*a0 + w*a1;
 }
 
 @implementation PerlinNoise
@@ -26,10 +31,7 @@ static float lerp(float a0, float a1, float w) {
 +(float*) generatePerlinNoise: (int) width: (int) height{
 	
 	int x,y,z;
-	const int octave = 5;
-	float amplitude = 2.0f;
-	float totalAmplitude = 0;
-	float persistance = 0.9;
+	float totalAmplitude = 0.0f;
 	
 	/*  Check arguments.    */
 	if(width < 1 || height < 1){
@@ -47,7 +49,7 @@ static float lerp(float a0, float a1, float w) {
 
 	/*  Generate gradiant.  */
 	if(grad == NULL)
-		grad = [PerlinNoise generateGradient: width / 2: height / 2];
+		grad = [PerlinNoise generateGradient: XMAX: YMAX];
 	
 	/*  Iterate through each pixel. */
 	for(z = 0; z < octave; z++){
@@ -61,7 +63,9 @@ static float lerp(float a0, float a1, float w) {
 				const float sampleFrquency = 1.0f / (float)samplePeriod;
 				
 				/*	*/
-				perlin[y * height + x] += [PerlinNoise perlin: ((float)x / (float) samplePeriod)  * sampleFrquency: ((float)y / (float) samplePeriod) * sampleFrquency] * totalAmplitude;
+				const float xpos = ((float)x / (float) samplePeriod)  * sampleFrquency;
+				const float ypos = ((float)y / (float) samplePeriod) * sampleFrquency;
+				perlin[y * height + x] += [PerlinNoise perlin: xpos: ypos] * totalAmplitude;
 			}
 		}
 	}
@@ -98,11 +102,11 @@ static float lerp(float a0, float a1, float w) {
 +(float) perlin: (float) x: (float) y{
 
 	/* Determine grid cell coordinates	*/
-	int x0 = (int)floor(x) % XMAX;
-	int x1 = (x0 + 1) % XMAX;
-	int y0 = (int)floor(y) % YMAX;
-	int y1 = (y0 + 1) % YMAX;
-
+	int x0 = (int)floor(x);
+	int x1 = (x0 + 1);
+	int y0 = (int)floor(y);
+	int y1 = (y0 + 1);
+	
 	// Determine interpolation weights
 	// Could also use higher order polynomial/s-curve here
 	float sx = x - (float)x0;
@@ -111,17 +115,16 @@ static float lerp(float a0, float a1, float w) {
 	/*	Interpolate between grid point gradients	*/
 	float n0, n1, ix0, ix1;
 
-	/*	*/
+	/*	Top.	*/
 	n0 = [PerlinNoise dotGridGradient:x0: y0: x: y];
 	n1 = [PerlinNoise dotGridGradient:x1: y0: x: y];
 	ix0 = lerp(n0, n1, sx);
 
-	/*	*/
+	/*	Bottom.	*/
 	n0 = [PerlinNoise dotGridGradient:x0: y1: x: y];
 	n1 = [PerlinNoise dotGridGradient:x1: y1: x: y];
 	ix1 = lerp(n0, n1, sx);
 	
-	/*	*/
 	return lerp(ix0, ix1, sy);
 }
 
@@ -130,9 +133,14 @@ static float lerp(float a0, float a1, float w) {
 	float dx = x - (float)ix;
 	float dy = y - (float)iy;
 	
+	/*	Wrap index.	*/
+	iy %= YMAX;
+	ix %= XMAX;
+	
 	/*	Fetch gradient vector.	*/
-	const float v0 = gradiant[ grad[iy * YMAX * 2 + 2 * ix] ][0];
-	const float v1 = gradiant[ grad[iy * YMAX * 2 + 2 * ix] ][1];
+	assert(iy >= 0 && ix >= 0);
+	const float v0 = gradiant[ grad[(iy * YMAX * 2) + (2 * ix)] ][0];
+	const float v1 = gradiant[ grad[(iy * YMAX * 2) + (2 * ix)] ][1];
 	
 	/*	*/
 	return (dx*v0 + dy*v1);

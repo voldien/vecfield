@@ -95,7 +95,7 @@
 	hpmvec4x4f_t scale;
 	hpmvec4x4f_t viewproj;
 	hpmvec3f cameraPos = {0.0f,0.0f,0.0f};
-	Motion motion;
+
 	float delta = 1.0f;
 	const float maxZoom = 64.0f;
 	const float minZoom = 0.8;
@@ -135,6 +135,7 @@
 	
 	/*  */
 	while(1){
+		Motion motion = {0.0f}; 
 		while(SDL_WaitEventTimeout(&event, timeout)){
 			switch(event.type){
 				case SDL_QUIT:
@@ -154,23 +155,32 @@
 					break;
 				case SDL_MOUSEMOTION:
 
-					if(event.button.button == 1 || event.button.button == 3){
+					/*	Move around.	*/
+					if(event.button.button == 2 || event.button.button == 3){
 						const float speed  = 0.1f * ( 1.0f / zoom ) ;
-						cameraPos[0] += -(event.motion.xrel * speed);
-						cameraPos[1] += (event.motion.yrel * speed);
+						cameraPos[0] += (event.motion.xrel * speed);
+						cameraPos[1] += -(event.motion.yrel * speed);
 						hpm_mat4x4_translationfv(translation, &cameraPos);
 						needMatrixUpdate = true;
 					}
+					/*	Add mouse influence.	*/
 					if(event.button.button == 1){
 						const float speed  = 0.5f;
 						const float radius = 20.0f;
-						hpmvec4f worldpos = {0};
-						motion.velocity.s[0] = (float)event.motion.xrel;
-						motion.velocity.s[1] = (float)event.motion.yrel;
-						//hpm_mat4x4_multiply_mat1x4fv(view, &worldpos);
-						motion.pos.s[0] = cameraPos[0] + event.button.x;
-						motion.pos.s[1] = cameraPos[1] + event.button.x;
-						motion.radius = radius;
+						hpmvec3f worldpos = {0};
+
+						
+						/*	Compute the world space position.	*/
+						int rect[4] = {0, 0, screen[0], screen[1]};
+						if(hpm_mat4x4_unprojf(event.motion.x, event.motion.y, 0.0f, proj, view, rect, &worldpos)){
+							motion.velocity.s[0] = (float)event.motion.xrel;
+							motion.velocity.s[1] = (float)event.motion.yrel;
+							motion.radius = radius;
+							
+							motion.pos.s[0] = worldpos[0];
+							motion.pos.s[1] = worldpos[1];
+							NSLog(@"-Pos%fx%f\n", worldpos[0], worldpos[1]);
+						}
 					}
 					break;
 				case SDL_MOUSEBUTTONDOWN:
