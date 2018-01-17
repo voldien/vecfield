@@ -4,7 +4,6 @@
 #include<assert.h>
 #include<hpm/hpm.h>
 
-
 @implementation VectorField
 
 +(float*) createVectorField: (int) width: (int) height{
@@ -16,10 +15,11 @@
 	const hpmvec2f lb = {1.0f, 1.0f};
 	const hpmvec2f rb = {-1.0f, 1.0f};
 	
-	const hpmvec2f left = {1,0};
-	const hpmvec2f right = {-1,0};
-	const hpmvec2f top = {0,-1};
-	const hpmvec2f bottom = {0,1};
+	/*	*/
+	const hpmvec2f left = {1.0f,0.0f};
+	const hpmvec2f right = {-1.0f, 0.0f};
+	const hpmvec2f top = {0.0f, -1.0f};
+	const hpmvec2f bottom = {0.0f, 1.0f};
 
 	/*	Check arguments.	*/
 	if(width < 1 || height < 1){
