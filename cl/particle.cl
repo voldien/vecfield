@@ -26,14 +26,6 @@ struct motion_t{
 	float radius;   /*  Radius of incluense, also the pressure of input.    */
 };
 
-/*	Particle box wall normal.	*/
-__constant float2 wall[4] = {
-	(float2)(1,0),
-	(float2)(-1,0),
-	(float2)(0,1),
-	(float2)(0,-1),
-};
-
 /**
  * Compute force influence from vector field.
  */
