@@ -31,6 +31,7 @@ typedef struct vecfield_option_t{
 	int height;			/*  Init height of the particle window.  */
 	int density;		/*	Particle density.	*/
 	int bgrendering;	/*  Enable background rendering/computing.  */
+	float speed;		/*	Speed of simulation.	*/
 }VecFieldOptions;
 
 #endif

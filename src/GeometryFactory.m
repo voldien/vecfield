@@ -64,11 +64,11 @@
 			for(k = 0; k < density; k++){
 				VFParticle* p = &particles[i * height * density + j * density + k];
 				const float delta = (float)k / (float)density;
-				const float m = 2 * PI * (rand() / INT_MAX);
+				const float m = 2 * PI * ((float)rand() / (float)INT_MAX);
 
 				/*	Particle position and init velocity.	*/
-				p->y = i + delta;
-				p->x = j + delta;
+				p->y = (float)i + delta;
+				p->x = (float)j + delta;
 				p->xdir = cos(m);
 				p->ydir = sin(m);
 			}
