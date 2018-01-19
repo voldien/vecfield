@@ -9,7 +9,8 @@
 +(float*) createVectorField: (int) width: (int) height{
 
 	int x, y;
-	const int blocksize = width * height * 2 * sizeof(float);
+	const float generalAmplitude = 20.0f;
+	const int blocksize = width * height * sizeof(hpmvec2f);
 	const hpmvec2f lt = {1.0f, -1.0f};
 	const hpmvec2f rt = {-1.0f, -1.0f};
 	const hpmvec2f lb = {1.0f, 1.0f};

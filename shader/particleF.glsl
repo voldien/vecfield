@@ -21,7 +21,7 @@ varying vec4 gColor;
 #endif
 
 vec4 computeColor(){
-	return texture(tex0, uv) * color * gColor;
+	return texture(tex0, uv) * color * gColor + ambientColor;
 }
 
 void main(void){

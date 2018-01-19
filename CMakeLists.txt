@@ -12,12 +12,12 @@ SET(PROJECT_VERSION "${VERSION}")
 # Set predefined macro for version.
 ADD_DEFINITIONS(-DVF_STR_VERSION="${VERSION}")
 
-# g++ compiler flags
+# gcc compiler flags
 SET(CMAKE_CXX_STANDARD 11)
 IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_IS_MINGW)
 
     # Set compile flag for enabling objective c support.
-    ADD_DEFINITIONS(-MMD -MP -Wdate-time -D_FORTIFY_SOURCE=2 -DGNUSTEP -DGNUSTEP_BASE_LIBRARY=1 -DGNU_GUI_LIBRARY=1 -DGNU_RUNTIME=1 -DGNUSTEP_BASE_LIBRARY=1 -fno-strict-aliasing -fexceptions -fobjc-exceptions -D_NATIVE_OBJC_EXCEPTIONS -pthread -fPIC -Wall -DGSWARN -DGSDIAGNOSE -Wno-import -g -O2 -fdebug-prefix-map=/build/gnustep-make-hGI6_J/gnustep-make-2.6.8=. -specs=/usr/share/dpkg/no-pie-compile.specs -fstack-protector-strong -Wformat -Werror=format-security -g -O2 -fdebug-prefix-map=/build/gnustep-make-hGI6_J/gnustep-make-2.6.8=. -specs=/usr/share/dpkg/no-pie-compile.specs -fstack-protector-strong -Wformat -Werror=format-security -fgnu-runtime -fconstant-string-class=NSConstantString -I. -I/home/voldie/GNUstep/Library/Headers -I/usr/local/include/GNUstep -I/usr/include/GNUstep)
+    ADD_DEFINITIONS(-MMD -MP -Wdate-time -D_FORTIFY_SOURCE=2 -DGNUSTEP -DGNUSTEP_BASE_LIBRARY=1 -DGNU_GUI_LIBRARY=1 -DGNU_RUNTIME=1 -DGNUSTEP_BASE_LIBRARY=1 -fno-strict-aliasing -fexceptions -fobjc-exceptions -D_NATIVE_OBJC_EXCEPTIONS -pthread -fPIC -Wall -DGSWARN -DGSDIAGNOSE -Wno-import -fdebug-prefix-map=/build/gnustep-make-hGI6_J/gnustep-make-2.6.8=. -specs=/usr/share/dpkg/no-pie-compile.specs -fstack-protector-strong -Wformat -Werror=format-security -fdebug-prefix-map=/build/gnustep-make-hGI6_J/gnustep-make-2.6.8=. -specs=/usr/share/dpkg/no-pie-compile.specs -fstack-protector-strong -Wformat -Werror=format-security -fgnu-runtime -fconstant-string-class=NSConstantString -I. -I/home/voldie/GNUstep/Library/Headers -I/usr/local/include/GNUstep -I/usr/include/GNUstep)
     ADD_DEFINITIONS(-I/usr/include/GNUstep)
 
 	IF (CMAKE_BUILD_TYPE STREQUAL "Release")
@@ -54,6 +54,7 @@ FILE(GLOB SHADER_CL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cl)
 # Define main target.
 ADD_EXECUTABLE(vecfield ${SOURCE_FILES})
 ADD_DEPENDENCIES(vecfield shaders)
+
 TARGET_LINK_LIBRARIES(vecfield -lgnustep-base -lOpenCL -lobjc -lGL -lGLEW -lSDL2 -lfreeimage -lz -lzip -lhpm -lm)
 INSTALL(TARGETS vecfield DESTINATION bin)
 

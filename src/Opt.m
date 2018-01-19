@@ -11,6 +11,7 @@ static void defaultOptions(VecFieldOptions* options){
 	options->bgrendering = 0;
 	options->vsync = 0;
 	options->density = 1;
+	options->speed = 1.0f;
 }
 
 @implementation Opt : NSObject
@@ -28,6 +29,7 @@ static void defaultOptions(VecFieldOptions* options){
 		{"bgrendering",		no_argument,		0, '_'},	/*	Enable rendering in the background.	*/
 		{"vsync",			no_argument,		0, '_'},	/*	Enable Vsync.	*/
 		{"density",			required_argument,	0, '_'},	/*	Set particle density.	*/
+		{"speed",			required_argument,	0, '_'},	/*	Set simulation speed.	*/
 		{NULL, 0, NULL, 0},
 	};
 
@@ -68,6 +70,8 @@ static void defaultOptions(VecFieldOptions* options){
 					option->vsync = 1;
 				if(strcmp(longoption[index].name, "density") == 0)
 					option->density = strtol(optarg, NULL, 10);
+				if(strcmp(longoption[index].name, "speed") == 0)
+					option->speed = strtof(optarg, NULL);
 				break;
 			default:
 				break;

@@ -250,7 +250,7 @@
 		if(background || visible){
 			
 			/*	Update deltatime.	*/
-			delta = (float)(SDL_GetPerformanceCounter() - ntime) / (float)SDL_GetPerformanceFrequency();
+			delta = ((float)(SDL_GetPerformanceCounter() - ntime) / (float)SDL_GetPerformanceFrequency()) * options->speed;
 			ntime = SDL_GetPerformanceCounter();
 			
 			/*  Draw grid.  */

@@ -10,10 +10,11 @@ smooth in vec4 vColor;
 #else
 varying vec4 vColor;
 #endif
+uniform vec4 ambientColor = vec4(0.35, 0.35, 0.35, 0.0);
 uniform vec4 color = vec4(0.0,1.0,0.0,1.0);
 
 vec4 computeColor(){
-	return vColor * color;
+	return vColor * color + ambientColor;
 }
 
 void main(void){

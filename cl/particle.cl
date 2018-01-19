@@ -26,28 +26,32 @@ struct motion_t{
 	float radius;   /*  Radius of incluense, also the pressure of input.    */
 };
 
-/*	Particle box wall normal.	*/
-__constant float2 wall[4] = {
-	(float2)(1,0),
-	(float2)(-1,0),
-	(float2)(0,1),
-	(float2)(0,-1),
-};
-
 /**
  * Compute force influence from vector field.
  */
 float2 computeInfluence(float4 particle, int2 vectorBox, __global float2* vector){
 	int x,y;
 	const int infl = 2;
+	
+	/*	*/
 	const float2 pos = particle.xy;
+	const int2 ij = convert_int2(floor(pos));
 	
 	/*	Compute total force.	*/
 	float2 force = (0,0);
 	for(y = 0; y < infl; y++){
 		for(x = 0; x < infl; x++){
-			const int index = ceil(pos.y) * vectorBox.x + floor(pos.x);
-			force += vector[index];
+
+			/*	Compute position and memory location.	*/
+			const int2 vpos = (ij.y + y, ij.x + x);
+			const float2 fvpos = convert_float2(vpos);
+			const int index = vpos.y * vectorBox.x + vpos.x;
+			const float2 vecforce = vector[index];
+			
+			/*	Compute influence force.	*/
+			const float dist = pown(distance(fvpos, pos), 2);
+			const float invDist = 1.0f / (dist + 2.0f);
+			force += vecforce * invDist;
 		}
 	}
 	
@@ -90,7 +94,7 @@ __kernel void simulate(__global float4* particles, __global const float2* vector
 	const int gw = get_global_size(0);
 	const int gh = get_global_size(1);
 	
-	/*	Group.	*/
+	/*	Private group size.	*/
 	const int nhw = 2 * density;
 	const int nlw = 2 * density;
 	
@@ -114,17 +118,14 @@ __kernel void simulate(__global float4* particles, __global const float2* vector
 			const float2 forceInf = computeInfluence(*part, vectorBox, vectorfield);
 			const float2 motionInf = computeMotionInfluence(*part, &motion);
 			
-			/*  Compute the force.  */
+			/*  Compute total force.  */
 			force = (velocity + forceInf + motionInf);
 			
 			/*  Add force to particle position. */
 			part->zw = force * invMass;
 			part->xy = pos.xy + part->zw * deltatime;
-			
-			/*  Check for edge collision.    */
-			//float infl = select(part->xy, max, isgreater(motion->radius, dist));
-			
-			
+
+			/*	Final position update.	*/
 			part->xy = clamp(part->xy, min, max);
 		}
 	}
