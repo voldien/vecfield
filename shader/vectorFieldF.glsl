@@ -9,13 +9,13 @@ uniform vec4 color = vec4(0.0,1.0,0.0,1.0);
 
 /*  */
 #if __VERSION__ > 120
-smooth in vec2 amplitude;
+smooth in vec3 amplitude;
 #else
-varying vec2 amplitude;
+varying vec3 amplitude;
 #endif
 
 vec4 computeColor(){
-	return vec4(amplitude, 0, 1);
+	return vec4(amplitude, 1.0);
 }
 
 void main(void){

@@ -475,7 +475,7 @@
 		}@catch(NSException* ex){
 			/*	Try loading file from current file directory.	*/
 			NSString* procPath = [ [[NSBundle mainBundle] bundlePath] autorelease];
-			NSString* path = [[[NSString alloc] initWithFormat:@"@s/%s", procPath, shaderfile] autorelease];
+			NSString* path = [[[NSString alloc] initWithFormat:@"%@/%s", procPath, shaderfile] autorelease];
 			if([[ex name] isEqualToString: @"NSFileNotFoundException"])
 				shaderZip = [ZipFile loadFile: [path cString]];
 			else
