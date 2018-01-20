@@ -10,15 +10,18 @@ uniform mat4 view;
 
 /*  */
 #if __VERSION__ > 120
-smooth out vec2 amplitude;
+smooth out vec3 amplitude;
 #else
-varying vec2 amplitude;
+varying vec3 amplitude;
 #endif
+
+/*	Compute arrow color.	*/
+vec3 computeColor(const in vec2 dir){
+	return vec3((dir.x + 1.0) / 2.0, (dir.y + 1.0) / 2.0, (dir.x - 1.0) / 2.0);
+}
 
 void main(void){
 	int i;
-	const vec2 minAmp = vec2(0.0,0.0);
-	const vec2 maxAmp = vec2(1.0,1.0);
 	const float PI = 3.14159265359;
 	const float hPI = PI;
 	const float arrowAngle = PI / 7.0;
@@ -35,21 +38,21 @@ void main(void){
 
 		/*	Start position.	*/
 		gl_Position = view * vec4(pos, 0.0, 1.0);
-		amplitude = clamp(2 * dir - vec2(1), minAmp, maxAmp);
+		amplitude = computeColor(dir);
 		EmitVertex();
 		
 		/*	End position.	*/
 		gl_Position = view * vec4(endPos, 0.0, 1.0);
-		amplitude = clamp(2.0f * dir - vec2(1), minAmp, maxAmp);
+		amplitude = computeColor(dir);
 		EmitVertex();
 		EndPrimitive();
 		
 		/*	Start left arrow position.	*/
 		gl_Position = view * vec4(endPos, 0.0, 1.0);
-		amplitude = clamp(2 * dir - vec2(1), minAmp, maxAmp);
+		amplitude = computeColor(dir);
 		EmitVertex();
 
-		/*	*/
+		/*	Precompute variables.	*/
 		const vec2 deltaDir = normalize(endPos - pos);
 		const float pgag = dot(deltaDir, identity);
 		const float pang = acos(pgag) * sign(deltaDir.y);
@@ -61,7 +64,7 @@ void main(void){
 		
 		/*	Start right arrow position.	*/
 		gl_Position = view * vec4(endPos, 0.0, 1.0);
-		amplitude = clamp(2 * dir - vec2(1), minAmp, maxAmp);
+		amplitude = computeColor(dir);
 		EmitVertex();
 
 		vec2 rvec = vec2(cos(hPI - arrowAngle + pang), sin(hPI - arrowAngle + pang)) * length(dir) * arrowLength;
