@@ -55,28 +55,28 @@
 	/*	Bottom and top edges.	*/
 	y = 0;
 	for(x = 0; x < width; x++){
-		vectorfield[(y * height) + x] = bottom;
+		vectorfield[(y * height) + x] = bottom * generalAmplitude;
 	}
 	y = height - 1;
 	for(x = 0; x < width; x++){
-		vectorfield[y * height + x] = top;
+		vectorfield[y * height + x] = top * generalAmplitude;
 	}
 	
 	/*	Left and right edges.	*/
 	x = 0;
 	for(y = 0; y < height; y++){
-		vectorfield[y * height + x] = left;
+		vectorfield[y * height + x] = left * generalAmplitude;
 	}
 	x = width - 1;
 	for(y = 0; y < height; y++){
-		vectorfield[y * height + x] = right;
+		vectorfield[y * height + x] = right * generalAmplitude;
 	}
 	
 	/*	Corners.	*/
-	vectorfield[0] = lb;
-	vectorfield[width - 1] = rb;
-	vectorfield[(height -1) * width] = lt;
-	vectorfield[width * height] = rt;
+	vectorfield[0] = lb * generalAmplitude;
+	vectorfield[width - 1] = rb * generalAmplitude;
+	vectorfield[(height -1) * width] = lt * generalAmplitude;
+	vectorfield[width * height] = rt * generalAmplitude;
 
 	free(perlin);
 	return (float*)vectorfield;
