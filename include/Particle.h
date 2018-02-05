@@ -24,8 +24,8 @@
  * Particle.
  */
 typedef struct vf_particle_t{
-    float x,y;
-    float xdir, ydir;
+	float x, y;             /*	Position.	*/
+	float xdir, ydir;       /*	Velocity.	*/
 }VF_ALIGN(16) VFParticle;
 
 #endif
