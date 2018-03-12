@@ -29,32 +29,42 @@ struct motion_t{
 /**
  * Compute force influence from vector field.
  */
-float2 computeInfluence(float4 particle, int2 vectorBox, __global float2* vector){
-	int x,y;
+float2 computeInfluence(const float2 position, const int2 vectorBox, __global const float2* vector){
+	int x, y;
 	const int infl = 2;
+	const float amplitude = 1.0f;
+	const float virtualGridScale = 10.0f;
 	
-	/*	*/
-	const float2 pos = particle.xy;
-	const int2 ij = convert_int2(floor(pos));
+	/*	Get position and position index.	*/
+	const float2 flopos = floor(position);
+	const int2 ij = convert_int2(flopos);
 	
 	/*	Compute total force.	*/
-	float2 force = (0,0);
+	float2 force = (0.0f, 0.0f);
 	for(y = 0; y < infl; y++){
+		
+		/*	Prefech vector field vector forces.	*/
+		const int memOffset = (ij.y * vectorBox.x); 
+		prefetch(&vector[memOffset], infl);
 		for(x = 0; x < infl; x++){
 
 			/*	Compute position and memory location.	*/
-			const int2 vpos = (ij.y + y, ij.x + x);
-			const float2 fvpos = convert_float2(vpos);
-			const int index = vpos.y * vectorBox.x + vpos.x;
+			const int2 vpos = ij + (x, y);
+			const float2 fvpos = flopos + ((float)x , (float)y);
+
+			/*	Fetch vector force.	*/
+			const int index = (vpos.y * vectorBox.x) + vpos.x;
 			const float2 vecforce = vector[index];
-			
+ 
 			/*	Compute influence force.	*/
-			const float dist = pown(distance(fvpos, pos), 2);
-			const float invDist = 1.0f / (dist + 2.0f);
-			force += vecforce * invDist;
+			const float dist = distance(fvpos, position);
+			const float distSquare = pown(dist, 2);
+			const float invDist = 1.0f / (distSquare + 20.0f);
+			
+			/*	Sum Additional force.	*/
+			force += (vecforce * invDist) * amplitude;
 		}
 	}
-	
 	return force;
 }
 
@@ -66,7 +76,7 @@ float2 computeMotionInfluence(float4 particle, struct motion_t* motion){
 	float dist = distance(particle.xy, motion->pos);
 	float infl = select(dist, motion->radius, isgreater(motion->radius, dist));
 	
-	return (0,0);
+	return 0.0f;
 	return (1.0f / infl) * motion->velocity;
 }
 
@@ -115,7 +125,7 @@ __kernel void simulate(__global float4* particles, __global const float2* vector
 			float2 pos = part->xy;
 			
 			/*  Get vector of incluense. - Bilinear   */
-			const float2 forceInf = computeInfluence(*part, vectorBox, vectorfield);
+			const float2 forceInf = computeInfluence(pos, vectorBox, vectorfield);
 			const float2 motionInf = computeMotionInfluence(*part, &motion);
 			
 			/*  Compute total force.  */
