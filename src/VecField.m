@@ -172,7 +172,7 @@
 						
 						/*	Compute the world space position.	*/
 						int rect[4] = {0, 0, screen[0], screen[1]};
-						if(hpm_mat4x4_unprojf(event.motion.x, event.motion.y, 0.0f, proj, view, rect, &worldpos)){
+						if(hpm_mat4x4_unprojf(event.motion.x, event.motion.y, 1.0f, proj, view, rect, &worldpos)){
 							motion.velocity.s[0] = (float)event.motion.xrel;
 							motion.velocity.s[1] = (float)event.motion.yrel;
 							motion.radius = radius;

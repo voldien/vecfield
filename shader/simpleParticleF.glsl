@@ -4,17 +4,18 @@ layout(location = 0) out vec4 fragColor;
 out vec4 fragColor;
 #endif
 
+uniform vec4 ambientColor = vec4(0.15, 0.15, 0.15, 0.0);
+uniform vec4 color = vec4(1.0,0.0,0.0,1.0);
+
 /*  */
 #if __VERSION__ > 120
 smooth in vec4 vColor;
 #else
 varying vec4 vColor;
 #endif
-uniform vec4 ambientColor = vec4(0.35, 0.35, 0.35, 0.0);
-uniform vec4 color = vec4(0.0,1.0,0.0,1.0);
 
 vec4 computeColor(){
-	return vColor * color + ambientColor;
+	return (color + vColor) + ambientColor;
 }
 
 void main(void){
