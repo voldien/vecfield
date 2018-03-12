@@ -53,7 +53,12 @@ void main(void){
 
 			/*	*/
 			gl_Position = view * vec4(particlePos, 1.0);
-			gColor = vec4(velocity, 0.0, 1.0);
+			
+			/*	Compute particle color.	*/
+			const float reduce = (1.0/-10.0);
+			const float green = (1.0 / 20.0);
+			const float blue = (1.0 / 5.0);
+			gColor = vec4(length(velocity) * reduce, velocity.x * green, velocity.y * blue, 1.0);
 			uv = cUV[j];
 			EmitVertex();
 		}
