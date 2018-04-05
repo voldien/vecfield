@@ -76,7 +76,6 @@ float2 computeMotionInfluence(float4 particle, struct motion_t* motion){
 	float dist = distance(particle.xy, motion->pos);
 	float infl = select(dist, motion->radius, isgreater(motion->radius, dist));
 	
-	return 0.0f;
 	return (1.0f / infl) * motion->velocity;
 }
 
