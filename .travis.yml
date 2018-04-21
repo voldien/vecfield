@@ -1,0 +1,24 @@
+language: c
+
+matrix:
+  include:
+    - os : linux
+      compiler : gcc
+      addons:
+
+addons:
+  apt:
+    packages:
+    - cmake
+    - ocl-icd-opencl-dev
+    - libsdl2-dev
+    - gnustep-devel
+    - libzip-dev
+    - mesa-common-dev
+    - opencl-headers
+
+script:
+  - mkdir build && cd build
+  - cmake ..
+  - cmake --build .
+  - ctest -VV
