@@ -1,5 +1,7 @@
 # VecField #
 ----
+[![Travis Build Status](https://travis-ci.org/voldien/vecfield.svg?branch=master)](https://travis-ci.org/voldien/vecfield)
+
 Simple dedicated vector-field particle simulation program that is written in *objective-c* with the *gnustep*. It uses OpenGL for rendering and OpenCL for computing the particle displacement.
 The program is not design as a research simulation program. But rather as a visualization program. However, the equations used for solving the particle displacement are based on the physical laws and formulas. Thus, it could be modified in the OpenCL code as such to mimic real particles.
 
