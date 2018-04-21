@@ -1,19 +1,20 @@
 language: c
-sudo : true
+sudo : required
+dist : trusty
 
 matrix:
   include:
     - os : linux
       compiler : gcc
       addons:
-    - os : 
+    - os : osx
 
 addons:
   apt:
     packages:
     - cmake
 
-before_script:
+before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -q
   - sudo apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers -y
