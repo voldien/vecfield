@@ -1,21 +1,21 @@
 language: c
+sudo : true
 
 matrix:
   include:
     - os : linux
       compiler : gcc
       addons:
+    - os : 
 
 addons:
   apt:
     packages:
     - cmake
-    - ocl-icd-opencl-dev
-    - libsdl2-dev
-    - gnustep-devel
-    - libzip-dev
-    - mesa-common-dev
-    - opencl-headers
+
+before_script:
+  - sudo apt-get update -qq
+  - sudo apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers
 
 script:
   - mkdir build && cd build
