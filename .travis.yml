@@ -14,8 +14,9 @@ addons:
     - cmake
 
 before_script:
-  - sudo apt-get update -qq
-  - sudo apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers
+  - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+  - sudo apt-get update -q
+  - sudo apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers -y
 
 script:
   - mkdir build && cd build
