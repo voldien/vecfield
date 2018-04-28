@@ -20,8 +20,10 @@ before_install:
   - sudo apt-get install -y libegl1-mesa-dev libgles2-mesa-dev
   - sudo apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers -y
   - git clone https://github.com/voldien/hpm.git
-  - make -C hpm/
-  - sudo make -C hpm/ install 
+  - mkdir hpm/build && cd hpm/build
+  - cmake ..
+  - cmake --build .
+  - sudo make install
 
 script:
   - mkdir build && cd build
