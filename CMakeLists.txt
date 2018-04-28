@@ -31,11 +31,9 @@ IF((CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX) AND NOT CMAKE_COMPILER_
 		ADD_DEFINITIONS( -g3 -O0 )
 		SET(CMAKE_DEBUG TRUE)
 	ENDIF()
-ELSEIF(MSVC)
-
-	# Enable multi-core complication with MSVC
-	ADD_DEFINITIONS(/MP)
-endif()
+ELSE()
+	MESSAGE(FATAL_ERROR "Non supported compiler!")
+ENDIF()
 
 #
 INCLUDE_DIRECTORIES({CMAKE_CURRENT_SOURCE_DIR}/include)
@@ -48,8 +46,8 @@ INCLUDE_DIRECTORIES(${OPENCL_INCLUDE_DIR})
 
 # Define all file lists.
 FILE(GLOB SOURCE_FILES ${CMAKE_CURRENT_SOURCE_DIR}/src/*.m)
-FILE(GLOB SHADER_GL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/shader)
-FILE(GLOB SHADER_CL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cl)
+FILE(GLOB SHADER_GL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/shader/)
+FILE(GLOB SHADER_CL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cl/)
 
 # Define main target.
 ADD_EXECUTABLE(vecfield ${SOURCE_FILES})
@@ -65,11 +63,14 @@ IF( UNIX )
 	SET( SHADERZIP "vfcommon" )
 	SET( SHADERZIPFILE "${SHADERZIP}.zip" )
 	ADD_CUSTOM_TARGET(	shaders
+				DEPENDS	${SHADER_GL_FILES}
+					${SHADER_CL_FILES}
 				COMMAND mkdir -p share
-				COMMAND cp -r shader/* share/
-		                COMMAND cp -r cl/* share/
+				COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/shader/* share/
+		                COMMAND cp -r ${CMAKE_CURRENT_SOURCE_DIR}/cl/* share/
 				COMMAND zip -r ${SHADERZIPFILE} share/
-				COMMAND rm -r share)
+				COMMAND rm -r share
+				COMMENT "Generate common file required.")
 	INSTALL( FILES ${SHADERZIPFILE} DESTINATION /usr/share/vecfield )
 
 	# Create distribution tarball.
