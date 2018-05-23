@@ -30,7 +30,7 @@ This will compile the program and create the dependencies resources and install 
 # Dependencies #
 In order to compile the program, the following Debian packages are required.
 ```
-apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers
+apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers libglew-dev
 ```
 The rest of the library dependencies are the OpenCL and OpenGL library provided by the graphic driver.
 
