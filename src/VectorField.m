@@ -37,6 +37,10 @@
 	/*  Generate perlin noise.  */
 	float* perlin = [PerlinNoise generatePerlinNoise: width: height];
 	assert(perlin);
+	
+	/*  Generate perlin noise.  */
+	float* perlinDifferentail = [PerlinNoise generateDifferntialPerlinNoise: width: height];
+	assert(perlinDifferentail);
 
 	/*  Generate vector field.  */
 	for(y = 0; y < height; y++){
@@ -44,7 +48,7 @@
 			const float theta = perlin[y * height + x];
 			
 			/*	amplitude.	*/
-			const float amplitude = 1.0f; //(perlin[y* height + (x + 1) % width] - theta) * 10;
+			const float amplitude = 10.0f * perlinDifferentail[y * height + x] + 1.0f;
 			
 			/*	*/
 			vectorfield[y * height + x][0] = cos(theta) * amplitude;
@@ -79,6 +83,7 @@
 	vectorfield[width * height] = rt * generalAmplitude;
 
 	free(perlin);
+	free(perlinDifferentail);
 	return (float*)vectorfield;
 }
 
