@@ -37,7 +37,7 @@ float2 computeInfluence(const float2 position, const int2 vectorBox, __global co
 	
 	/*	Get position and position index.	*/
 	const float2 flopos = floor(position);
-	const int2 ij = convert_int2(flopos);
+	const int2 ij = min(convert_int2(flopos), vectorBox - (1,1));
 	
 	/*	Compute total force.	*/
 	float2 force = (0.0f, 0.0f);
@@ -76,7 +76,6 @@ float2 computeMotionInfluence(float4 particle, struct motion_t* motion){
 	float dist = distance(particle.xy, motion->pos);
 	float infl = select(dist, motion->radius, isgreater(motion->radius, dist));
 	
-	return 0.0f;
 	return (1.0f / infl) * motion->velocity;
 }
 

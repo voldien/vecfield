@@ -156,6 +156,12 @@ const char* get_cl_error_str(unsigned int errorcode){
 		
 		/*	Get extension function from the platform.	*/
 		clGetGLContextInfoKHR = (clGetGLContextInfoKHR_fn)clGetExtensionFunctionAddressForPlatform(platforms[nselectPlatform], "clGetGLContextInfoKHR");
+		if(clGetGLContextInfoKHR == NULL){
+			@throw [NSException
+			exceptionWithName:@"NSErrorException"
+			reason:[[[NSString alloc] initWithFormat:@"clGetExtensionFunctionAddressForPlatform failed"] autorelease]
+			userInfo:nil];
+		} 
 		props[1] = (cl_context_properties)platforms[x];
 
 		/*	Get associcated OpenGL context GPU device.	*/

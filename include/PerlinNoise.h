@@ -34,6 +34,12 @@
 +(float*)generatePerlinNoise:(int) width: (int) height;
 
 /**
+ * @return non-null float2 array.
+ * @throws NSInvalidArgumentException if width or height is less than 1.
+ */
++(float*)generateDifferntialPerlinNoise: (int) width: (int) height;
+
+/**
  * Generate gradient plane.
  * @returns float, 2D array of R^2 vectors.
  * @throws NSInvalidArgumentException if width or height is less than 1.
@@ -45,6 +51,11 @@
  * @return perlin value.
  */
 +(float) perlin: (float) x: (float) y;
+
+/**
+ * @return
+ */
++(float) perlinDifferentail: (float) x: (float) y;
 
 /**
  * Compute dot gradient value.
