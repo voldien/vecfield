@@ -23,8 +23,10 @@ before_install:
   - git clone https://github.com/voldien/hpm.git
   - mkdir hpm/build && cd hpm/build
   - cmake ..
+  - export CC=gcc6
   - cmake --build .
-  - sudo make install CC=gcc6
+  - export CC=gcc
+  - sudo make install
 
 script:
   - mkdir build && cd build
