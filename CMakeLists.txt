@@ -71,6 +71,7 @@ IF( UNIX )
 				COMMAND zip -r ${SHADERZIPFILE} share/
 				COMMAND rm -r share)
 	INSTALL( FILES ${SHADERZIPFILE} DESTINATION /usr/share/vecfield )
+	INSTALL( FILES vecfield.bc DESTINATION /usr/share/bash-completion/completions RENAME vecfield)
 
 	# Create distribution tarball.
 	SET( TARGETDIR "${PROJECT_NAME}-${VERSION}")
