@@ -18,7 +18,7 @@ before_install:
   - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
   - sudo apt-get update -q
   - sudo apt-get install -y libegl1-mesa-dev libgles2-mesa-dev
-  - sudo apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers lib libglew-dev -y
+  - sudo apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers libglew-dev -y
   - sudo apt-get install gcc-6 -y
   - git clone https://github.com/voldien/hpm.git
   - mkdir hpm/build && cd hpm/build
