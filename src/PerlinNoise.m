@@ -192,6 +192,8 @@ VF_ALWAYS_INLINE static float lerp(float a0, float a1, float w) {
 	n3 = [PerlinNoise dotGridGradient:x1: y1: x: y];
 	/*ix1 = lerp(n0, n1, sx);	*/
 	
+	/*	d/dt [lerp(lerp(a,b,t),lerp(c,d,t),t)]*/
+	/*	The Bézier curve deriviate won't really work, because the lines are not connected.	*/
 	return sx * ( -2.0 * n2 + 2.0f * n3 - 2.0 * n1 + 2.0f * n0) + n2 - n0 * 3.0f * n0;
 }
 
