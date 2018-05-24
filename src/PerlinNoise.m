@@ -72,6 +72,44 @@ VF_ALWAYS_INLINE static float lerp(float a0, float a1, float w) {
 	return perlin;
 }
 
++(float*)generateDifferntialPerlinNoise: (int) width: (int) height{
+	
+	int x,y,z;
+	float totalAmplitude = 0.0f;
+	
+	/*  Generate gradiant.  */
+	if(grad == NULL)
+		grad = [PerlinNoise generateGradient: XMAX: YMAX];
+	
+	/*  Allocate perlin noise map.  */
+	const int size = width * height * sizeof(float);
+	float* perlin = (float*)malloc(size);
+	assert(perlin);
+	memset(perlin, 0, size);
+	
+	/*  Iterate through each pixel. */
+	for(z = octave - 1; z >= 0; z--){
+		for(y = 0; y < height; y++){
+			for(x = 0; x < width; x++){
+				amplitude *= persistance;
+				totalAmplitude += amplitude;
+				
+				/*	Frequency.	*/
+				const unsigned int samplePeriod = (1 << z);
+				const float sampleFrquency = (float)samplePeriod;
+				
+				/*	Accumulate noise level.	*/
+				const float xpos = ((float)x / (float) samplePeriod)  * sampleFrquency;
+				const float ypos = ((float)y / (float) samplePeriod) * sampleFrquency;
+				perlin[y * height + x] += [PerlinNoise perlinDifferentail: xpos: ypos] * totalAmplitude;
+			}
+		}
+	}
+	
+	
+	return perlin;
+}
+
 +(uint8_t*) generateGradient: (int) width: (int) height{
 	int x,y;
 	
@@ -126,6 +164,35 @@ VF_ALWAYS_INLINE static float lerp(float a0, float a1, float w) {
 	ix1 = lerp(n0, n1, sx);
 	
 	return lerp(ix0, ix1, sy);
+}
+
++(float) perlinDifferentail: (float) x: (float) y{
+	
+	/* Determine grid cell coordinates	*/
+	int x0 = (int)floor(x);
+	int x1 = (x0 + 1);
+	int y0 = (int)floor(y);
+	int y1 = (y0 + 1);
+	
+	// Determine interpolation weights
+	// Could also use higher order polynomial/s-curve here
+	float sx = x - (float)x0;
+	float sy = y - (float)y0;
+
+	/*	Interpolate between grid point gradients	*/
+	float n0, n1, n2, n3, ix0, ix1;
+
+	/*	Top.	*/
+	n0 = [PerlinNoise dotGridGradient:x0: y0: x: y];
+	n1 = [PerlinNoise dotGridGradient:x1: y0: x: y];
+	/*ix0 = lerp(n0, n1, sx);	*/
+
+	/*	Bottom.	*/
+	n2 = [PerlinNoise dotGridGradient:x0: y1: x: y];
+	n3 = [PerlinNoise dotGridGradient:x1: y1: x: y];
+	/*ix1 = lerp(n0, n1, sx);	*/
+	
+	return sx * ( -2.0 * n2 + 2.0f * n3 - 2.0 * n1 + 2.0f * n0) + n2 - n0 * 3.0f * n0;
 }
 
 +(float) dotGridGradient: (int) ix: (int) iy: (float) x: (float) y{
