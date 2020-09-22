@@ -163,20 +163,26 @@
 						hpm_mat4x4_translationfv(translation, &cameraPos);
 						needMatrixUpdate = true;
 					}
+
 					/*	Add mouse influence.	*/
+
 					if(event.button.button == 1){
 						const float speed  = 0.5f;
 						const float radius = 20.0f;
-						hpmvec3f worldpos = {0};
+						hpmvec3f worldpos;
 
 						
 						/*	Compute the world space position.	*/
-						int rect[4] = {0, 0, screen[0], screen[1]};
-						if(hpm_mat4x4_unprojf(event.motion.x, event.motion.y, 1.0f, proj, view, rect, &worldpos)){
-							motion.velocity.s[0] = (float)event.motion.xrel;
-							motion.velocity.s[1] = (float)event.motion.yrel;
+						int viewport[4] = {0, 0, (int)screen[0], (int)screen[1]};
+						NSLog(@"-Screen%dx%d\n", viewport[2], viewport[3]);
+						NSLog(@"-Screen%fx%f\n", screen[0], screen[1]);
+						NSLog(@"-Mouse%dx%d\n", event.motion.x, event.motion.y);
+						if(hpm_mat4x4_unprojf((float)event.motion.x, (float)event.motion.y, 0.0f, proj, view, &viewport[0], &worldpos)) {
+							motion.velocity.s[0] = (float) event.motion.xrel;
+							motion.velocity.s[1] = (float) event.motion.yrel;
 							motion.radius = radius;
-							
+
+							/*	*/
 							motion.pos.s[0] = worldpos[0];
 							motion.pos.s[1] = worldpos[1];
 							NSLog(@"-Pos%fx%f\n", worldpos[0], worldpos[1]);

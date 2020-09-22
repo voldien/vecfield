@@ -231,8 +231,8 @@ const char* get_cl_error_str(unsigned int errorcode){
 		userInfo:nil];
 	}
 
-	/*	Compile and build CL program.   */
-	ciErrNum = clBuildProgram(program, nDevices, device, "-cl-std=CL1.2", NULL, NULL);
+	/*	Compile and build CL program.   */ //  "-O0 -x clc -w -g -cl-kernel-arg-info"
+	ciErrNum = clBuildProgram(program, nDevices, device, NULL, NULL, NULL);
 	if(ciErrNum != CL_SUCCESS){
 		if(ciErrNum == CL_BUILD_PROGRAM_FAILURE){
 			char build_log[900];
@@ -281,7 +281,7 @@ const char* get_cl_error_str(unsigned int errorcode){
 	
 	cl_int ciErrNum;
 	cl_command_queue queue;
-	cl_command_queue_properties pro = 0;
+	cl_command_queue_properties pro = CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE;
 	
 	/*  Create command.	*/
 	queue = clCreateCommandQueueWithProperties(context,
