@@ -20,7 +20,7 @@
 /**
  * Motion pointer.
  */
-struct motion_t{
+struct motion_t {
 	float2 pos;     /*  Position in pixel space.    */
 	float2 velocity /*  direction and magnitude of mouse movement.  */;
 	float radius;   /*  Radius of incluense, also the pressure of input.    */
@@ -37,7 +37,7 @@ float2 computeInfluence(const float2 position, const int2 vectorBox, __global co
 	
 	/*	Get position and position index.	*/
 	const float2 flopos = floor(position);
-	const int2 ij = min(convert_int2(flopos), vectorBox - (1,1));
+	const int2 ij = min(convert_int2(flopos), vectorBox - (0,0));
 	
 	/*	Compute total force.	*/
 	float2 force = (0.0f, 0.0f);
@@ -58,8 +58,8 @@ float2 computeInfluence(const float2 position, const int2 vectorBox, __global co
  
 			/*	Compute influence force.	*/
 			const float dist = distance(fvpos, position);
-			const float distSquare = pown(dist, 2);
-			const float invDist = 1.0f / (distSquare + 20.0f);
+			const float distSquare = pown(dist, 2) * virtualGridScale;
+			const float invDist = 1.0f / (distSquare);
 			
 			/*	Sum Additional force.	*/
 			force += (vecforce * invDist) * amplitude;
@@ -89,7 +89,7 @@ __kernel void simulate(__global float4* particles, __global const float2* vector
 	const float mass = 1.0f;
 	const float invMass = 1.0f / mass;
 	
-	/*	*/
+	/*	Bounding Box of the simluation.	*/
 	const float2 max = ((float)particleBox.x, (float)particleBox.y);
 	const float2 min = (0.0, 0.0);
 	
@@ -132,7 +132,9 @@ __kernel void simulate(__global float4* particles, __global const float2* vector
 			
 			/*  Add force to particle position. */
 			part->zw = force * invMass;
-			part->xy = pos.xy + part->zw * deltatime;
+			velocity = part->zw;
+			/*	Update the position.	*/
+			part->xy = pos.xy + velocity * deltatime;
 
 			/*	Final position update.	*/
 			part->xy = clamp(part->xy, min, max);

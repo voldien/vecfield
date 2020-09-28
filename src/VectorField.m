@@ -9,7 +9,7 @@
 +(float*) createVectorField: (int) width: (int) height{
 
 	int x, y;
-	const float generalAmplitude = 20.0f;
+	const float generalAmplitude = 400.0f;
 	const int blocksize = width * height * sizeof(hpmvec2f);
 	const hpmvec2f lt = {1.0f, -1.0f};
 	const hpmvec2f rt = {-1.0f, -1.0f};
@@ -43,16 +43,17 @@
 	assert(perlinDifferentail);
 
 	/*  Generate vector field.  */
+	const float scale = 15.0f;
 	for(y = 0; y < height; y++){
 		for(x = 0; x < width; x++){
 			const float theta = perlin[y * height + x];
-			
+			const float theta2 = perlin[(height - y) * height + x];
 			/*	amplitude.	*/
-			const float amplitude = 10.0f * perlinDifferentail[y * height + x] + 1.0f;
+			const float amplitude = HPM_CLAMP(perlin[y * height + x] * scale, 0.5f, 1000000.0f);
 			
 			/*	*/
-			vectorfield[y * height + x][0] = cos(theta) * amplitude;
-			vectorfield[y * height + x][1] = sin(theta) * amplitude;
+			vectorfield[y * height + x][0] = cos(theta * 2.0f + theta2) * amplitude;
+			vectorfield[y * height + x][1] = sin(theta * 2.0f + theta2) * amplitude;
 		}
 	}
 	
