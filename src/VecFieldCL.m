@@ -281,7 +281,7 @@ const char* get_cl_error_str(unsigned int errorcode){
 	
 	cl_int ciErrNum;
 	cl_command_queue queue;
-	cl_command_queue_properties pro = CL_QUEUE_OUT_OF_ORDER_EXEC_MODE_ENABLE;
+	cl_command_queue_properties pro = 0;
 	
 	/*  Create command.	*/
 	queue = clCreateCommandQueueWithProperties(context,

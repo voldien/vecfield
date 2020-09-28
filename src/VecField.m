@@ -103,7 +103,7 @@
 	
 	/*	*/
 	const int timeout = 0;
-	const float orthdiv = 4.0f;
+	const float orthdiv = 2.0f;
 	int visible = 1;
 	float screen[2];
 	int width, height;
@@ -124,7 +124,7 @@
 	cameraPos[1] = options->height / -2;
 	
 	/*  Set init matrix.	*/
-	hpm_mat4x4_orthfv(proj, -(float)width/ orthdiv, (float)width / orthdiv, -(float)height / orthdiv, (float)height / orthdiv, -1.0f, 1.0f);
+	hpm_mat4x4_orthfv(proj, -(float)width/ orthdiv, (float)width / orthdiv, -(float)height / orthdiv, (float)height / orthdiv, -(float)width/ orthdiv, (float)width/ orthdiv);
 	hpm_mat4x4_scalef(scale, zoom, zoom, 0);
 	hpm_mat4x4_translationfv(translation, &cameraPos);
 	hpm_mat4x4_identityfv(view);
@@ -165,7 +165,6 @@
 					}
 
 					/*	Add mouse influence.	*/
-
 					if(event.button.button == 1){
 						const float speed  = 0.5f;
 						const float radius = 20.0f;
@@ -174,10 +173,9 @@
 						
 						/*	Compute the world space position.	*/
 						int viewport[4] = {0, 0, (int)screen[0], (int)screen[1]};
-						NSLog(@"-Screen%dx%d\n", viewport[2], viewport[3]);
-						NSLog(@"-Screen%fx%f\n", screen[0], screen[1]);
-						NSLog(@"-Mouse%dx%d\n", event.motion.x, event.motion.y);
-						if(hpm_mat4x4_unprojf((float)event.motion.x, (float)event.motion.y, 0.0f, proj, view, &viewport[0], &worldpos)) {
+						NSLog(@"-Screen:%dx%d\n", viewport[2], viewport[3]);
+						NSLog(@"-Mouse:%dx%d\n", event.motion.x, event.motion.y);
+						if(hpm_mat4x4_unprojf((float)event.motion.x, (float)event.motion.y, 1.0f, proj, view, &viewport[0], &worldpos)) {
 							motion.velocity.s[0] = (float) event.motion.xrel;
 							motion.velocity.s[1] = (float) event.motion.yrel;
 							motion.radius = radius;
@@ -185,7 +183,7 @@
 							/*	*/
 							motion.pos.s[0] = worldpos[0];
 							motion.pos.s[1] = worldpos[1];
-							NSLog(@"-Pos%fx%f\n", worldpos[0], worldpos[1]);
+							NSLog(@"-Pos:%fx%f\n", worldpos[0], worldpos[1]);
 						}
 					}
 					break;
@@ -284,6 +282,7 @@
 			}
 
 			/*	Swap framebuffer.	*/
+			glFlush();
 			SDL_GL_SwapWindow(self->window);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			
@@ -343,7 +342,15 @@
 			reason:[NSString stringWithFormat:@"clEnqueueNDRangeKernel - %s - %d", [VecFieldCL getCLStringError: err], err]
 			userInfo:nil];
 	}
-	
+
+	// err = clFlush(self->clqueue);
+	// if(err != CL_SUCCESS){
+	// 	@throw [NSException
+	// 		exceptionWithName:@"NSErrorException"
+	// 		reason:[NSString stringWithFormat:@"clFlush - %s - %d", [VecFieldCL getCLStringError: err], err]
+	// 		userInfo:nil];
+	// }
+
 	/*	Wait intill the computation is done.	*/
 	err = clFinish(self->clqueue);
 	if(err != CL_SUCCESS){
@@ -352,7 +359,8 @@
 			reason:[NSString stringWithFormat:@"clFinish - %s - %d", [VecFieldCL getCLStringError: err], err]
 			userInfo:nil];
 	}
-	[VecFieldCL releaseGLObject: self->clqueue: self->clparticles];
+
+	[VecFieldCL releaseGLObject:self->clqueue:self->clparticles];	
 }
 
 -(SDL_Window*) createWindow{
