@@ -19,7 +19,7 @@ jobs:
       
     - name: Configure dependencies
       run: |
-        sudo apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers libglew-dev
+        sudo apt-get install ocl-icd-opencl-dev libsdl2-dev gnustep-devel libzip-dev mesa-common-dev opencl-headers libglew-dev libfreeimage-dev
         
     - name: Create Build Environment
       # Some projects don't allow in-source building, so create a separate build directory
