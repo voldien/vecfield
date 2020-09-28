@@ -7,7 +7,7 @@
 #import"Geometry.h"
 #import"Debug.h"
 #import"Opt.h"
-#include<hpm/hpm.h>
+#include<hpm.h>
 #include<SDL2/SDL.h>
 
 @implementation VecField : Resource

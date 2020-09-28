@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.7.2)
 PROJECT(vecfield)
+OPTION(BUILD_WITH_EXTERNAL_PROJECT "Build with external" ON)
 
 # Set version of the project.
 SET(VERSION_MAJOR 0)
@@ -36,9 +37,56 @@ ELSE()
 	MESSAGE(FATAL_ERROR "Non supported compiler!")
 ENDIF()
 
-#
-INCLUDE_DIRECTORIES({CMAKE_CURRENT_SOURCE_DIR}/include)
-ADD_DEFINITIONS(-I${CMAKE_CURRENT_SOURCE_DIR}/include)
+FIND_PACKAGE(Git)
+IF(GIT_FOUND)
+	MESSAGE(STATUS "git found: ${GIT_EXECUTABLE} -- ${GIT_VERSION_STRING}")
+ENDIF()
+IF(GIT_FOUND AND EXISTS "${PROJECT_SOURCE_DIR}/.git")
+	# Update submodules as needed
+	OPTION(GIT_SUBMODULE "Check submodules during build" ON)
+	IF(GIT_SUBMODULE)
+		MESSAGE(STATUS "Submodule update")
+		EXECUTE_PROCESS(COMMAND ${GIT_EXECUTABLE} submodule update --init
+						WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+						RESULT_VARIABLE GIT_SUBMOD_RESULT)
+		IF(NOT GIT_SUBMOD_RESULT EQUAL "0")
+			MESSAGE(FATAL_ERROR "git submodule update --init failed with ${GIT_SUBMOD_RESULT}, please checkout submodules")
+		ENDIF()
+	ENDIF()
+ELSE()
+
+ENDIF()
+
+IF (BUILD_WITH_EXTERNAL_PROJECT)
+	INCLUDE(ExternalProject)
+	IF (NOT GIT_FOUND)
+		MESSAGE(FATAL_ERROR "Git is required in order to fetch the external project hpm.")
+	ENDIF ()
+
+	SET_PROPERTY(DIRECTORY PROPERTY EP_STEP_TARGETS build)
+
+	# Download the hpm library.
+	SET(HPM_ROOT ${CMAKE_CURRENT_BINARY_DIR}/deps/hpm)
+	SET(HPM_LIB_DIR ${HPM_ROOT}/lib)
+	SET(HPM_INCLUDE_DIR ${HPM_ROOT}/include)
+	ExternalProject_Add(hpm-external
+			URL ${CMAKE_CURRENT_SOURCE_DIR}/extern/hpm
+			SOURCE_DIR ${HPM_ROOT}/src/hpm
+			BINARY_DIR ${HPM_ROOT}/src/hpm-build
+			INSTALL_DIR ${HPM_ROOT}
+			CMAKE_ARGS -DCMAKE_INSTALL_PREFIX:PATH=<INSTALL_DIR> -DCMAKE_BUILD_TYPE=${CMAKE_BUILD_TYPE} -DBUILD_TEST=OFF
+			STEP_TARGETS build
+			COMMENT "Building Hpm."
+			LOG_DOWNLOAD ON)
+	# Include HPM headers.
+	ADD_LIBRARY(hpm SHARED IMPORTED)
+	ADD_DEPENDENCIES(hpm hpm-external)
+	SET_TARGET_PROPERTIES(hpm PROPERTIES
+			IMPORTED_LOCATION ${HPM_LIB_DIR}/libhpm.so
+			INTERFACE_LINK_LIBRARIES ${HPM_LIB_DIR}/libhpm.so
+				INTERFACE_INCLUDE_DIRECTORIES ${CMAKE_CURRENT_SOURCE_DIR}/extern/hpm/include)
+	SET(HPM_INCLUDE_DIRS "${CMAKE_CURRENT_SOURCE_DIR}/extern/hpm/include")
+ENDIF ()
 
 # Find OpenGL and OpenCL information.
 SET(OpenGL_GL_PREFERENCE "GLVND")
@@ -53,9 +101,10 @@ FILE(GLOB SHADER_CL_FILES ${CMAKE_CURRENT_SOURCE_DIR}/cl/)
 
 # Define main target.
 ADD_EXECUTABLE(vecfield ${SOURCE_FILES})
-ADD_DEPENDENCIES(vecfield shaders)
+ADD_DEPENDENCIES(vecfield shaders hpm)
+TARGET_INCLUDE_DIRECTORIES(vecfield PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/include ${HPM_INCLUDE_DIRS}  PUBLIC )
 
-TARGET_LINK_LIBRARIES(vecfield -lgnustep-base -lOpenCL -lobjc -lGL -lGLEW -lSDL2 -lfreeimage -lz -lzip -lhpm -lm)
+TARGET_LINK_LIBRARIES(vecfield gnustep-base OpenCL objc GL GLEW SDL2 freeimage z zip hpm m)
 INSTALL(TARGETS vecfield DESTINATION bin)
 
 # Only UNIX systems.

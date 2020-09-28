@@ -1,7 +1,7 @@
 #import"PerlinNoise.h"
 #import"VecDef.h"
 #include<Foundation/Foundation.h>
-#include<hpm/hpm.h>
+#include<hpm.h>
 #include<assert.h>
 #include<stdio.h>
 #include<time.h>

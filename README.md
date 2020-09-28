@@ -1,4 +1,5 @@
 # VecField #
+[![Actions Build Status](https://github.com/voldien/vecfield/workflows/vecfield/badge.svg?branch=master)](https://github.com/voldien/vecfield/actions)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![GitHub release](https://img.shields.io/github/release/voldien/vecfield.svg)](https://github.com/voldien/vecfield/releases)
 

@@ -2,7 +2,7 @@
 #import"VectorField.h"
 #import"PerlinNoise.h"
 #include<assert.h>
-#include<hpm/hpm.h>
+#include<hpm.h>
 
 @implementation VectorField
 

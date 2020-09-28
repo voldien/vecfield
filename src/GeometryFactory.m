@@ -1,7 +1,7 @@
 #import"GeometryFactory.h"
 #import"Geometry.h"
 #import"Particle.h"
-#include<hpm/hpm.h>
+#include<hpm.h>
 #include<assert.h>
 #include<GL/glew.h>
 
