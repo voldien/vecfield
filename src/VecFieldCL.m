@@ -279,7 +279,7 @@ const char* get_cl_error_str(unsigned int errorcode){
 
 +(cl_command_queue) createCommandQueue: (cl_context) context: (cl_device_id) device{
 	
-	cl_int ciErrNum;
+	cl_int ciErrNum = 0;
 	cl_command_queue queue;
 	cl_command_queue_properties pro = 0;
 	
